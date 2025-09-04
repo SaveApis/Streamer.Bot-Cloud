@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: middleware
+  labels:
+    organization: saveapis
+    project: streamer.bot-cloud
+    app: middleware
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      organization: saveapis
+      project: streamer.bot-cloud
+      app: middleware
+  template:
+    metadata:
+      name: middleware
+      labels:
+        organization: saveapis
+        project: streamer.bot-cloud
+        app: middleware
+    spec:
+      containers:
+        - name: middleware
+          image: streamer-bot-cloud-middleware:%VERSION%
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          env:
+            - name: aspnetcore_environment
+              valueFrom:
+                configMapKeyRef:
+                  name: core
+                  key: environment
+                  optional: false
+      restartPolicy: Always
+      

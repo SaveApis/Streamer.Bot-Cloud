@@ -1,0 +1,66 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: streamer-bot-cloud-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - %INGRESS_HOST%
+  rules:
+    - host: %INGRESS_HOST%
+      http:
+        paths:
+          - path: /api/middleware(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: middleware
+                port:
+                  number: 8080
+          - path: /api/event/twitch(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: event-twitch
+                port:
+                  number: 8080
+          - path: /api/event/discord(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: event-discord
+                port:
+                  number: 8080
+          - path: /api/event/youtube(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: event-youtube
+                port:
+                  number: 8080
+          - path: /api/bot/twitch(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: bot-twitch
+                port:
+                  number: 8080
+          - path: /api/bot/discord(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: bot-discord
+                port:
+                  number: 8080
+          - path: /api/bot/youtube(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: bot-youtube
+                port:
+                  number: 8080

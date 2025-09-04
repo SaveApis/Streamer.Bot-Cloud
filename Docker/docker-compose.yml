@@ -1,0 +1,82 @@
+﻿services:
+  middleware:
+    hostname: middleware
+    container_name: middleware
+    image: streamer-bot-cloud-middleware:dev
+    build:
+      context: ..
+      dockerfile: src/Software/Software.Middleware/Dockerfile
+    ports:
+      - "5000:8080"
+  event-twitch:
+    depends_on:
+      middleware:
+        condition: service_started
+    hostname: event-twitch
+    container_name: event-twitch
+    image: streamer-bot-cloud-event-twitch:dev
+    build:
+      context: ..
+      dockerfile: src/Software/Event/Software.Event.Twitch/Dockerfile
+    ports:
+      - "6000:8080"
+  event-discord:
+    depends_on:
+      middleware:
+        condition: service_started
+    hostname: event-discord
+    container_name: event-discord
+    image: streamer-bot-cloud-event-discord:dev
+    build:
+      context: ..
+      dockerfile: src/Software/Event/Software.Event.Discord/Dockerfile
+    ports:
+      - "6001:8080"
+  event-youtube:
+    depends_on:
+      middleware:
+        condition: service_started
+    hostname: event-youtube
+    container_name: event-youtube
+    image: streamer-bot-cloud-event-youtube:dev
+    build:
+      context: ..
+      dockerfile: src/Software/Event/Software.Event.YouTube/Dockerfile
+    ports:
+      - "6002:8080"
+  bot-twitch:
+    depends_on:
+      middleware:
+        condition: service_started
+    hostname: bot-twitch
+    container_name: bot-twitch
+    image: streamer-bot-cloud-bot-twitch:dev
+    build:
+      context: ..
+      dockerfile: src/Software/Bot/Software.Bot.Twitch/Dockerfile
+    ports:
+      - "7000:8080"
+  bot-discord:
+    depends_on:
+      middleware:
+        condition: service_started
+    hostname: bot-discord
+    container_name: bot-discord
+    image: streamer-bot-cloud-bot-discord:dev
+    build:
+      context: ..
+      dockerfile: src/Software/Bot/Software.Bot.Discord/Dockerfile
+    ports:
+      - "7001:8080"
+  bot-youtube:
+    depends_on:
+      middleware:
+        condition: service_started
+    hostname: bot-youtube
+    container_name: bot-youtube
+    image: streamer-bot-cloud-bot-youtube:dev
+    build:
+      context: ..
+      dockerfile: src/Software/Bot/Software.Bot.YouTube/Dockerfile
+    ports:
+      - "7002:8080"

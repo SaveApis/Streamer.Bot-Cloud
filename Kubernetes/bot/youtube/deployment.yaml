@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bot-youtube
+  labels:
+    organization: saveapis
+    project: streamer.bot-cloud
+    app: bot-youtube
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      organization: saveapis
+      project: streamer.bot-cloud
+      app: bot-youtube
+  template:
+    metadata:
+      name: bot-youtube
+      labels:
+        organization: saveapis
+        project: streamer.bot-cloud
+        app: bot-youtube
+    spec:
+      initContainers:
+        - name: wait-for-middleware
+          image: busybox:1.37.0
+          command: [ 'sh', '-c', 'until nc -z -v -w30 middleware.streamer-bot-cloud-%ENVIRONMENT%.svc.cluster.local 8080; do echo "Waiting for middleware..."; sleep 5; done;' ]
+      containers:
+        - name: bot-youtube
+          image: streamer-bot-cloud-bot-youtube:%VERSION%
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          env:
+            - name: aspnetcore_environment
+              valueFrom:
+                configMapKeyRef:
+                  name: core
+                  key: environment
+                  optional: false
+      restartPolicy: Always
+      
