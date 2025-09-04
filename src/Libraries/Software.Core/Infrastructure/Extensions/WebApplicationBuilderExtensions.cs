@@ -14,12 +14,12 @@ public static class WebApplicationBuilderExtensions
         var currentAssembly = Assembly.GetExecutingAssembly();
         var utilAssemblies = ReadUtilAssemblies();
 
-        var assemblyHelper = new AssemblyHelper([softwareAssembly, currentAssembly, ..utilAssemblies]);
+        var assemblyHelper = new AssemblyHelper([softwareAssembly, currentAssembly, .. utilAssemblies]);
 
         builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory())
             .ConfigureContainer<ContainerBuilder>((_, containerBuilder) => containerBuilder.RegisterModule(new CoreModule(assemblyHelper)));
     }
-    
+
     private static IEnumerable<Assembly> ReadUtilAssemblies()
     {
         yield return typeof(CoreModule).Assembly;
