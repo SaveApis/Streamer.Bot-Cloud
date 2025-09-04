@@ -1,0 +1,23 @@
+namespace: streamer-bot-cloud-%ENVIRONMENT%
+resources:
+  - namespace.yaml
+  - ingress.yaml
+  - middleware/deployment.yaml
+  - middleware/service.yaml
+  - event/twitch/deployment.yaml
+  - event/twitch/service.yaml
+  - event/discord/deployment.yaml
+  - event/discord/service.yaml
+  - event/youtube/deployment.yaml
+  - event/youtube/service.yaml
+  - bot/twitch/deployment.yaml
+  - bot/twitch/service.yaml
+  - bot/discord/deployment.yaml
+  - bot/discord/service.yaml
+  - bot/youtube/deployment.yaml
+  - bot/youtube/service.yaml
+
+configMapGenerator:
+  - name: core
+    literals:
+      - environment=%ENVIRONMENT%
