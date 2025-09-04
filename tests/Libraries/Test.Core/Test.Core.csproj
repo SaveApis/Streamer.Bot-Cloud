@@ -1,0 +1,38 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="coverlet.collector" Version="6.0.4">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
+    <PackageReference Include="NUnit" Version="4.4.0" />
+    <PackageReference Include="NUnit.Analyzers" Version="4.10.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="NUnit3TestAdapter" Version="5.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="NUnit.Framework" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\src\Software\Bot\Software.Bot.Discord\Software.Bot.Discord.csproj" />
+    <ProjectReference Include="..\..\..\src\Software\Bot\Software.Bot.Twitch\Software.Bot.Twitch.csproj" />
+    <ProjectReference Include="..\..\..\src\Software\Bot\Software.Bot.YouTube\Software.Bot.YouTube.csproj" />
+    <ProjectReference Include="..\..\..\src\Software\Event\Software.Event.Discord\Software.Event.Discord.csproj" />
+    <ProjectReference Include="..\..\..\src\Software\Event\Software.Event.Twitch\Software.Event.Twitch.csproj" />
+    <ProjectReference Include="..\..\..\src\Software\Event\Software.Event.YouTube\Software.Event.YouTube.csproj" />
+    <ProjectReference Include="..\..\..\src\Software\Software.Middleware\Software.Middleware.csproj" />
+  </ItemGroup>
+
+</Project>
