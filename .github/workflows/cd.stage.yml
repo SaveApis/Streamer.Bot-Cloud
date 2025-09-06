@@ -5,6 +5,7 @@ on:
       - main
     paths:
       - src/**
+      - Kubernetes/**
       - .github/workflows/cd.stage.yml
 
 jobs:
@@ -199,17 +200,17 @@ jobs:
         run: find Kubernetes/ -type f -name '*.yaml.bak'
       - name: Deploy to kubernetes
         run: kubectl apply -k Kubernetes/
-      - name: Verify Deployment
-        run: kubectl rollout status deployment/middleware
+      - name: Verify Deployment (Middleware)
+        run: kubectl rollout status deployment/middleware -n streamer-bot-cloud-staging
       - name: Verify Deployment (Event Twitch)
-        run: kubectl rollout status deployment/event-twitch
+        run: kubectl rollout status deployment/event-twitch -n streamer-bot-cloud-staging
       - name: Verify Deployment (Event Discord)
-        run: kubectl rollout status deployment/event-discord
+        run: kubectl rollout status deployment/event-discord -n streamer-bot-cloud-staging
       - name: Verify Deployment (Event YouTube)
-        run: kubectl rollout status deployment/event-youtube
+        run: kubectl rollout status deployment/event-youtube -n streamer-bot-cloud-staging
       - name: Verify Deployment (Bot Twitch)
-        run: kubectl rollout status deployment/bot-twitch
+        run: kubectl rollout status deployment/bot-twitch -n streamer-bot-cloud-staging
       - name: Verify Deployment (Bot Discord)
-        run: kubectl rollout status deployment/bot-discord
+        run: kubectl rollout status deployment/bot-discord -n streamer-bot-cloud-staging
       - name: Verify Deployment (Bot YouTube)
-        run: kubectl rollout status deployment/bot-youtube
+        run: kubectl rollout status deployment/bot-youtube -n streamer-bot-cloud-staging
