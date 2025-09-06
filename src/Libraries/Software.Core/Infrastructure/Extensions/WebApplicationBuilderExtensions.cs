@@ -36,5 +36,6 @@ public static class WebApplicationBuilderExtensions
         yield return typeof(CoreModule).Assembly;
         yield return typeof(RestModule).Assembly;
         yield return typeof(CorrelationModule).Assembly;
+        yield return typeof(SwaggerModule).Assembly;
     }
 }
