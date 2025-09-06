@@ -13,7 +13,7 @@ public class CorrelationModule : Module
 
         collection.AddCorrelate(options => options.IncludeInResponse = true);
         collection.ConfigureHttpClientDefaults(clientBuilder => clientBuilder.CorrelateRequests());
-        
+
         builder.Populate(collection);
     }
 }
