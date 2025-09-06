@@ -6,6 +6,7 @@ using Utils.Core;
 using Utils.Core.Application.Helpers;
 using Utils.Correlation;
 using Utils.Rest;
+using Utils.Swagger;
 
 namespace Software.Core.Infrastructure.Extensions;
 
@@ -25,6 +26,7 @@ public static class WebApplicationBuilderExtensions
 
                     containerBuilder.RegisterModule(new RestModule(assemblyHelper));
                     containerBuilder.RegisterModule<CorrelationModule>();
+                    containerBuilder.RegisterModule<SwaggerModule>();
                 }
             );
     }
