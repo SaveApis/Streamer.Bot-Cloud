@@ -1,19 +1,35 @@
-name: CD (Stage)
+name: CD (Production)
 on:
   push:
     branches:
       - main
     paths:
-      - src/**
-      - Kubernetes/**
-      - .github/workflows/cd.stage.yml
+      - CHANGELOG.md
 
-concurrency: 
-  group: cd-stage
+concurrency:
+  group: cd-production
   cancel-in-progress: true
 
 jobs:
+  read-version:
+    outputs:
+      version: ${{ steps.read_version.outputs.version }}
+    name: Read version
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5.0.0
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5.0.0
+        with:
+          dotnet-version: 9.0.x
+      - name: Restore .NET Tools
+        run: dotnet tool restore
+      - name: Read version
+        id: read_version
+        run: echo "version=$(dotnet versionize inspect)" >> $GITHUB_OUTPUT
   docker-middleware:
+    needs: read-version
     name: Deploy Docker Middleware
     runs-on: ubuntu-22.04
     steps:
@@ -35,8 +51,9 @@ jobs:
           push: true
           context: .
           file: src/Software/Software.Middleware/Dockerfile
-          tags: registry.digitalocean.com/saveapis/streamer-bot-cloud-middleware:${{ github.sha }}
+          tags: registry.digitalocean.com/saveapis/streamer-bot-cloud-middleware:${{ needs.read-version.outputs.version }}
   docker-event-twitch:
+    needs: read-version
     name: Deploy Docker Event (Twitch)
     runs-on: ubuntu-22.04
     steps:
@@ -58,8 +75,9 @@ jobs:
           push: true
           context: .
           file: src/Software/Event/Software.Event.Twitch/Dockerfile
-          tags: registry.digitalocean.com/saveapis/streamer-bot-cloud-event-twitch:${{ github.sha }}
+          tags: registry.digitalocean.com/saveapis/streamer-bot-cloud-event-twitch:${{ needs.read-version.outputs.version }}
   docker-event-discord:
+    needs: read-version
     name: Deploy Docker Event (Discord)
     runs-on: ubuntu-22.04
     steps:
@@ -81,8 +99,9 @@ jobs:
           push: true
           context: .
           file: src/Software/Event/Software.Event.Discord/Dockerfile
-          tags: registry.digitalocean.com/saveapis/streamer-bot-cloud-event-discord:${{ github.sha }}
+          tags: registry.digitalocean.com/saveapis/streamer-bot-cloud-event-discord:${{ needs.read-version.outputs.version }}
   docker-event-youtube:
+    needs: read-version
     name: Deploy Docker Event (YouTube)
     runs-on: ubuntu-22.04
     steps:
@@ -104,8 +123,9 @@ jobs:
           push: true
           context: .
           file: src/Software/Event/Software.Event.YouTube/Dockerfile
-          tags: registry.digitalocean.com/saveapis/streamer-bot-cloud-event-youtube:${{ github.sha }}
+          tags: registry.digitalocean.com/saveapis/streamer-bot-cloud-event-youtube:${{ needs.read-version.outputs.version }}
   docker-bot-twitch:
+    needs: read-version
     name: Deploy Docker Bot (Twitch)
     runs-on: ubuntu-22.04
     steps:
@@ -127,8 +147,9 @@ jobs:
           push: true
           context: .
           file: src/Software/Bot/Software.Bot.Twitch/Dockerfile
-          tags: registry.digitalocean.com/saveapis/streamer-bot-cloud-bot-twitch:${{ github.sha }}
+          tags: registry.digitalocean.com/saveapis/streamer-bot-cloud-bot-twitch:${{ needs.read-version.outputs.version }}
   docker-bot-discord:
+    needs: read-version
     name: Deploy Docker Bot (Discord)
     runs-on: ubuntu-22.04
     steps:
@@ -150,8 +171,9 @@ jobs:
           push: true
           context: .
           file: src/Software/Bot/Software.Bot.Discord/Dockerfile
-          tags: registry.digitalocean.com/saveapis/streamer-bot-cloud-bot-discord:${{ github.sha }}
+          tags: registry.digitalocean.com/saveapis/streamer-bot-cloud-bot-discord:${{ needs.read-version.outputs.version }}
   docker-bot-youtube:
+    needs: read-version
     name: Deploy Docker Bot (YouTube)
     runs-on: ubuntu-22.04
     steps:
@@ -173,9 +195,10 @@ jobs:
           push: true
           context: .
           file: src/Software/Bot/Software.Bot.YouTube/Dockerfile
-          tags: registry.digitalocean.com/saveapis/streamer-bot-cloud-bot-youtube:${{ github.sha }}
+          tags: registry.digitalocean.com/saveapis/streamer-bot-cloud-bot-youtube:${{ needs.read-version.outputs.version }}
   kubernetes:
     needs:
+      - read-version
       - docker-middleware
       - docker-event-twitch
       - docker-event-discord
@@ -197,24 +220,24 @@ jobs:
       - name: Replace Variables
         run: |
           find Kubernetes/ -type f -name '*.yaml' -exec sed -i.bak \
-            -e 's|%ENVIRONMENT%|staging|g' \
-            -e 's|%INGRESS_HOST%|staging.streamer-bot-cloud.saveapis.de|g' \
-            -e 's|%VERSION%|${{ github.sha }}|g' {} +
+            -e 's|%ENVIRONMENT%|production|g' \
+            -e 's|%INGRESS_HOST%|streamer-bot-cloud.saveapis.de|g' \
+            -e 's|%VERSION%|${{ needs.read-version.outputs.version }}|g' {} +
       - name: Find changed files
         run: find Kubernetes/ -type f -name '*.yaml.bak'
       - name: Deploy to kubernetes
         run: kubectl apply -k Kubernetes/
       - name: Verify Deployment (Middleware)
-        run: kubectl rollout status deployment/middleware -n streamer-bot-cloud-staging
+        run: kubectl rollout status deployment/middleware -n streamer-bot-cloud-production
       - name: Verify Deployment (Event Twitch)
-        run: kubectl rollout status deployment/event-twitch -n streamer-bot-cloud-staging
+        run: kubectl rollout status deployment/event-twitch -n streamer-bot-cloud-production
       - name: Verify Deployment (Event Discord)
-        run: kubectl rollout status deployment/event-discord -n streamer-bot-cloud-staging
+        run: kubectl rollout status deployment/event-discord -n streamer-bot-cloud-production
       - name: Verify Deployment (Event YouTube)
-        run: kubectl rollout status deployment/event-youtube -n streamer-bot-cloud-staging
+        run: kubectl rollout status deployment/event-youtube -n streamer-bot-cloud-production
       - name: Verify Deployment (Bot Twitch)
-        run: kubectl rollout status deployment/bot-twitch -n streamer-bot-cloud-staging
+        run: kubectl rollout status deployment/bot-twitch -n streamer-bot-cloud-production
       - name: Verify Deployment (Bot Discord)
-        run: kubectl rollout status deployment/bot-discord -n streamer-bot-cloud-staging
+        run: kubectl rollout status deployment/bot-discord -n streamer-bot-cloud-production
       - name: Verify Deployment (Bot YouTube)
-        run: kubectl rollout status deployment/bot-youtube -n streamer-bot-cloud-staging
+        run: kubectl rollout status deployment/bot-youtube -n streamer-bot-cloud-production
