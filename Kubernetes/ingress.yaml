@@ -11,6 +11,7 @@ spec:
   tls:
     - hosts:
         - %INGRESS_HOST%
+      secretName: %INGRESS_HOST%-tls
   rules:
     - host: %INGRESS_HOST%
       http:
