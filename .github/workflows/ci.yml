@@ -1,0 +1,229 @@
+name: Lint
+on:
+  push:
+    paths:
+      - src/**
+      - tests/**
+      - .github/workflows/ci.yml
+
+jobs:
+  lint:
+    concurrency:
+      group: ${{ github.ref }}-lint
+      cancel-in-progress: true
+    name: Lint
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: read
+      packages: read
+      statuses: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5.0.0
+        with:
+          fetch-depth: 0
+      - name: Super-Linter
+        uses: super-linter/super-linter@v8.1.0
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          VALIDATE_CSHARP: true
+          VALIDATE_DOCKERFILE_HADOLINT: true
+          VALIDATE_GITHUB_ACTIONS: true
+          VALIDATE_GITLEAKS: true
+  build-csharp:
+    name: Build C#
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5.0.0
+        with:
+          fetch-depth: 0
+      - name: Cache
+        id: cache
+        uses: actions/cache@v4.2.4
+        with:
+          path: |
+            ~/.nuget/packages
+            **/obj
+          key: dotnet-${{ hashFiles('**/*.csproj') }}
+          restore-keys: dotnet-
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5.0.0
+        with:
+          dotnet-version: 9.0.x
+      - name: Install dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: dotnet restore
+      - name: Build
+        run: dotnet build --configuration Release --no-restore --nologo
+
+  build-docker-middleware:
+    needs: build-csharp
+    name: Build Docker Middleware
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5.0.0
+        with:
+          fetch-depth: 0
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3.6.0
+      - name: Docker Setup Buildx
+        uses: docker/setup-buildx-action@v3.11.1
+      - name: Build and push Docker images
+        uses: docker/build-push-action@v6.18.0
+        with:
+          context: .
+          file: src/Software/Software.Middleware/Dockerfile
+          push: false
+          tags: streamer-bot-cloud-middleware:dev
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+  build-docker-event-twitch:
+    needs: build-csharp
+    name: Build Docker Event (Twitch)
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5.0.0
+        with:
+          fetch-depth: 0
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3.6.0
+      - name: Docker Setup Buildx
+        uses: docker/setup-buildx-action@v3.11.1
+      - name: Build and push Docker images
+        uses: docker/build-push-action@v6.18.0
+        with:
+          context: .
+          file: src/Software/Event/Software.Event.Twitch/Dockerfile
+          push: false
+          tags: streamer-bot-cloud-event-twitch:dev
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+  build-docker-event-discord:
+    needs: build-csharp
+    name: Build Docker Event (Discord)
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5.0.0
+        with:
+          fetch-depth: 0
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3.6.0
+      - name: Docker Setup Buildx
+        uses: docker/setup-buildx-action@v3.11.1
+      - name: Build and push Docker images
+        uses: docker/build-push-action@v6.18.0
+        with:
+          context: .
+          file: src/Software/Event/Software.Event.Discord/Dockerfile
+          push: false
+          tags: streamer-bot-cloud-event-discord:dev
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+  build-docker-event-youtube:
+    needs: build-csharp
+    name: Build Docker Event (YouTube)
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5.0.0
+        with:
+          fetch-depth: 0
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3.6.0
+      - name: Docker Setup Buildx
+        uses: docker/setup-buildx-action@v3.11.1
+      - name: Build and push Docker images
+        uses: docker/build-push-action@v6.18.0
+        with:
+          context: .
+          file: src/Software/Event/Software.Event.YouTube/Dockerfile
+          push: false
+          tags: streamer-bot-cloud-event-youtube:dev
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+  build-docker-bot-twitch:
+    needs: build-csharp
+    name: Build Docker Bot (Twitch)
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5.0.0
+        with:
+          fetch-depth: 0
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3.6.0
+      - name: Docker Setup Buildx
+        uses: docker/setup-buildx-action@v3.11.1
+      - name: Build and push Docker images
+        uses: docker/build-push-action@v6.18.0
+        with:
+          context: .
+          file: src/Software/Bot/Software.Bot.Twitch/Dockerfile
+          push: false
+          tags: streamer-bot-cloud-bot-twitch:dev
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+  build-docker-bot-discord:
+    needs: build-csharp
+    name: Build Docker Bot (Discord)
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5.0.0
+        with:
+          fetch-depth: 0
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3.6.0
+      - name: Docker Setup Buildx
+        uses: docker/setup-buildx-action@v3.11.1
+      - name: Build and push Docker images
+        uses: docker/build-push-action@v6.18.0
+        with:
+          context: .
+          file: src/Software/Bot/Software.Bot.Discord/Dockerfile
+          push: false
+          tags: streamer-bot-cloud-bot-discord:dev
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+  build-docker-bot-youtube:
+    needs: build-csharp
+    name: Build Docker Bot (YouTube)
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5.0.0
+        with:
+          fetch-depth: 0
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3.6.0
+      - name: Docker Setup Buildx
+        uses: docker/setup-buildx-action@v3.11.1
+      - name: Build and push Docker images
+        uses: docker/build-push-action@v6.18.0
+        with:
+          context: .
+          file: src/Software/Bot/Software.Bot.YouTube/Dockerfile
+          push: false
+          tags: streamer-bot-cloud-bot-youtube:dev
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
