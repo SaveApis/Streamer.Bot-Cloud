@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Builder;
 using Utils.Core;
 using Utils.Core.Application.Helpers;
 using Utils.Correlation;
+using Utils.Mediator;
 using Utils.Rest;
 using Utils.Swagger;
 
@@ -27,6 +28,8 @@ public static class WebApplicationBuilderExtensions
                     containerBuilder.RegisterModule(new RestModule(assemblyHelper));
                     containerBuilder.RegisterModule<CorrelationModule>();
                     containerBuilder.RegisterModule<SwaggerModule>();
+
+                    containerBuilder.RegisterModule(new MediatorModule(assemblyHelper));
                 }
             );
     }
@@ -34,8 +37,11 @@ public static class WebApplicationBuilderExtensions
     private static IEnumerable<Assembly> ReadUtilAssemblies()
     {
         yield return typeof(CoreModule).Assembly;
+
         yield return typeof(RestModule).Assembly;
         yield return typeof(CorrelationModule).Assembly;
         yield return typeof(SwaggerModule).Assembly;
+
+        yield return typeof(MediatorModule).Assembly;
     }
 }
