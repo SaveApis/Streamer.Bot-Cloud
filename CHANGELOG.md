@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [versionize](https://github.com/versionize/versionize) for commit guidelines.
 
+<a name="1.1.0"></a>
+## [1.1.0](https://www.github.com/SaveApis/Streamer.Bot-Cloud/releases/tag/v1.1.0) (2025-09-06)
+
+### ✨ Features
+
+* Correlation Module ([#10](https://www.github.com/SaveApis/Streamer.Bot-Cloud/issues/10)) ([2d752b9](https://www.github.com/SaveApis/Streamer.Bot-Cloud/commit/2d752b92b35a04910c93781cdc2eec0b35f9b516))
+* Rest Module ([#9](https://www.github.com/SaveApis/Streamer.Bot-Cloud/issues/9)) ([f4f0008](https://www.github.com/SaveApis/Streamer.Bot-Cloud/commit/f4f00088a2e58c298538c73db198653f76f7f14e))
+* Swagger module ([#11](https://www.github.com/SaveApis/Streamer.Bot-Cloud/issues/11)) ([20cc1b7](https://www.github.com/SaveApis/Streamer.Bot-Cloud/commit/20cc1b74e165c7f7cc55fc09b6efe4d920f297ff))
+
+### ♻️ Code Refactoring
+
+* Disable 'Try it out' button in swagger ([#13](https://www.github.com/SaveApis/Streamer.Bot-Cloud/issues/13)) ([31d54df](https://www.github.com/SaveApis/Streamer.Bot-Cloud/commit/31d54df849fd0904e1761ca345d715117b85f48c))
+
+### 🐛 Bug Fixes
+
+* Fix kubernetes ingress tls ([#12](https://www.github.com/SaveApis/Streamer.Bot-Cloud/issues/12)) ([644e5a0](https://www.github.com/SaveApis/Streamer.Bot-Cloud/commit/644e5a0dc8777b929d3dcbd38db29f182dde3bf6))
+
 <a name="1.0.0"></a>
 ## [1.0.0](https://www.github.com/SaveApis/Streamer.Bot-Cloud/releases/tag/v1.0.0) (2025-09-06)
 
