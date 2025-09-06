@@ -27,7 +27,7 @@ spec:
           command: [ 'sh', '-c', 'until nc -z -v -w30 middleware.streamer-bot-cloud-%ENVIRONMENT%.svc.cluster.local 8080; do echo "Waiting for middleware..."; sleep 5; done;' ]
       containers:
         - name: event-twitch
-          image: streamer-event-cloud-event-twitch:%VERSION%
+          image: registry.digitalocean.com/saveapis/streamer-event-cloud-event-twitch:%VERSION%
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080

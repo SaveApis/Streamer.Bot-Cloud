@@ -27,7 +27,7 @@ spec:
           command: [ 'sh', '-c', 'until nc -z -v -w30 middleware.streamer-bot-cloud-%ENVIRONMENT%.svc.cluster.local 8080; do echo "Waiting for middleware..."; sleep 5; done;' ]
       containers:
         - name: bot-discord
-          image: streamer-bot-cloud-bot-discord:%VERSION%
+          image: registry.digitalocean.com/saveapis/streamer-bot-cloud-bot-discord:%VERSION%
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
