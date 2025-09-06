@@ -8,6 +8,9 @@ builder.ConfigureSaveApis(Assembly.GetExecutingAssembly());
 
 var app = builder.Build();
 
+app.UseSwagger();
+app.UseSwaggerUI();
+
 app.UseCorrelate();
 
 app.UseAuthentication();
