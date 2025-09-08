@@ -27,7 +27,7 @@ spec:
       initContainers:
         - name: wait-for-middleware
           image: busybox:1.37.0
-          command: [ 'sh', '-c', 'until nc -z -v -w30 middleware.streamer-event-cloud-%ENVIRONMENT%.svc.cluster.local 8080; do echo "Waiting for middleware..."; sleep 5; done;' ]
+          command: [ 'sh', '-c', 'until nc -z -v -w30 middleware.streamer-bot-cloud-%ENVIRONMENT%.svc.cluster.local 8080; do echo "Waiting for middleware..."; sleep 5; done;' ]
       containers:
         - name: event-discord-backend
           image: registry.digitalocean.com/saveapis/streamer-bot-cloud-event-discord:%VERSION%

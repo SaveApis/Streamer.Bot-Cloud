@@ -23,7 +23,7 @@ public static class WebApplicationBuilderExtensions
         var utilAssemblies = ReadUtilAssemblies();
 
         var assemblyHelper = new AssemblyHelper([softwareAssembly, currentAssembly, .. utilAssemblies]);
-        
+
         var tmpApplicationType = applicationType;
 
         builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory())

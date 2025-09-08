@@ -19,14 +19,14 @@ public class DefaultDashboardAuthorizationFilter(IDashboardAuthorizationHandler 
             Challenge(httpContext);
             return false;
         }
-        
+
         var parameter = authorizationHeaderValue.Parameter ?? string.Empty;
         if (string.IsNullOrWhiteSpace(parameter))
         {
             Challenge(httpContext);
             return false;
         }
-        
+
         var credentials = Encoding.UTF8.GetString(Convert.FromBase64String(parameter));
         var parts = credentials.Split(':', 2);
         if (parts.Length != 2)
@@ -34,10 +34,10 @@ public class DefaultDashboardAuthorizationFilter(IDashboardAuthorizationHandler 
             Challenge(httpContext);
             return false;
         }
-        
+
         var identifier = UrlEncoder.Default.Encode(parts[0]);
         var password = UrlEncoder.Default.Encode(parts[1]);
-        
+
         var isAuthorized = await handler.AuthorizeAsync(identifier, password, httpContext.RequestAborted);
         if (isAuthorized)
         {
@@ -45,7 +45,7 @@ public class DefaultDashboardAuthorizationFilter(IDashboardAuthorizationHandler 
         }
 
         Challenge(httpContext);
-        return true;
+        return false;
     }
 
     private static void Challenge(HttpContext httpContext)

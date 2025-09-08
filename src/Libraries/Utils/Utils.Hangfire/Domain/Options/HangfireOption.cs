@@ -6,7 +6,7 @@ public class HangfireOption
 {
     public required RedisOption Redis { get; init; }
     public required DashboardOption Dashboard { get; init; }
-    
+
     public required int WorkerCount { get; init; }
     public required TimeSpan ExpirationTimeout { get; init; }
 

@@ -19,7 +19,7 @@ public class HangfireEventHandler<TEvent>(ILogger<HangfireEventHandler<TEvent>> 
             logger.LogDebug("No jobs assigned for event: {Name}", typeof(TEvent).Name);
             return;
         }
-        
+
         logger.LogDebug("Found {Count} jobs assigned for event: {Name}", jobs.Count, typeof(TEvent).Name);
         foreach (var job in jobs)
         {

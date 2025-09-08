@@ -33,10 +33,10 @@ public class CreateRecurringEventJob(ILogger<IJob<RecurringEventFoundEvent>> log
         }
 
         manager.AddOrUpdate(summary.Id, summary.CodeQueue.ToString().ToLowerInvariant(), () => Publish(instance, CancellationToken.None), () => summary.CodeCron, recurringJobOptions);
-        
+
         return Task.CompletedTask;
     }
-    
+
     [HangfireJobName("{0}: Publish recurring event")]
     public async Task Publish(IRecurringHangfireEvent recurringHangfireEvent, CancellationToken cancellationToken)
     {

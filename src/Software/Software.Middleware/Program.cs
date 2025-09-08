@@ -9,7 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.ConfigureSaveApis(Assembly.GetExecutingAssembly(), out var applicationType);
 if (applicationType == ApplicationType.Backend)
 {
-    builder.Services.AddAuthorization();    
+    builder.Services.AddAuthorization();
 }
 
 var app = builder.Build();

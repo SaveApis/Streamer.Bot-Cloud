@@ -21,7 +21,7 @@ public static class WebApplicationExtensions
         {
             PrefixPath = hangfireOption.Dashboard.PrefixPath,
             AppPath = null,
-            AsyncAuthorization = application.Environment.IsDevelopment() 
+            AsyncAuthorization = application.Environment.IsDevelopment()
                 ? []
                 : [scope.ServiceProvider.GetRequiredService<DefaultDashboardAuthorizationFilter>()],
             DarkModeEnabled = true,

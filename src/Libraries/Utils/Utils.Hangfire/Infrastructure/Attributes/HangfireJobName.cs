@@ -23,10 +23,10 @@ public class HangfireJobName(string displayName) : JobDisplayNameAttribute(displ
         {
             return null;
         }
-        
+
         var parts = ns.Split('.');
         var index = Array.IndexOf(parts, part);
-        
+
         if (index >= 0 && index < parts.Length - 1)
         {
             return parts[index + 1];
