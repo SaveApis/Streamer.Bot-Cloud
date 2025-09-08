@@ -88,6 +88,11 @@ jobs:
         uses: actions/setup-dotnet@v5.0.0
         with:
           dotnet-version: 9.0.x
+      - name: Setup Nuget Feeds
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          dotnet nuget add source ${{ secrets.HANGFIRE_ACE_URL }} --name Hangfire.Ace --username ${{ secrets.HANGFIRE_ACE_USER }} --password ${{ secrets.HANGFIRE_ACE_TOKEN }} --store-password-in-clear-text
+          dotnet nuget add source ${{ secrets.HANGFIRE_PRO_URL }} --name Hangfire.Pro --username ${{ secrets.HANGFIRE_PRO_USER }} --password ${{ secrets.HANGFIRE_PRO_TOKEN }} --store-password-in-clear-text
       - name: Install dependencies
         if: steps.cache.outputs.cache-hit != 'true'
         run: dotnet restore
@@ -117,6 +122,11 @@ jobs:
         uses: actions/setup-dotnet@v5.0.0
         with:
           dotnet-version: 9.0.x
+      - name: Setup Nuget Feeds
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          dotnet nuget add source ${{ secrets.HANGFIRE_ACE_URL }} --name Hangfire.Ace --username ${{ secrets.HANGFIRE_ACE_USER }} --password ${{ secrets.HANGFIRE_ACE_TOKEN }} --store-password-in-clear-text
+          dotnet nuget add source ${{ secrets.HANGFIRE_PRO_URL }} --name Hangfire.Pro --username ${{ secrets.HANGFIRE_PRO_USER }} --password ${{ secrets.HANGFIRE_PRO_TOKEN }} --store-password-in-clear-text
       - name: Install dependencies
         if: steps.cache.outputs.cache-hit != 'true'
         run: dotnet restore
@@ -146,6 +156,11 @@ jobs:
         uses: actions/setup-dotnet@v5.0.0
         with:
           dotnet-version: 9.0.x
+      - name: Setup Nuget Feeds
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          dotnet nuget add source ${{ secrets.HANGFIRE_ACE_URL }} --name Hangfire.Ace --username ${{ secrets.HANGFIRE_ACE_USER }} --password ${{ secrets.HANGFIRE_ACE_TOKEN }} --store-password-in-clear-text
+          dotnet nuget add source ${{ secrets.HANGFIRE_PRO_URL }} --name Hangfire.Pro --username ${{ secrets.HANGFIRE_PRO_USER }} --password ${{ secrets.HANGFIRE_PRO_TOKEN }} --store-password-in-clear-text
       - name: Install dependencies
         if: steps.cache.outputs.cache-hit != 'true'
         run: dotnet restore
@@ -176,6 +191,13 @@ jobs:
           tags: streamer-bot-cloud-middleware:dev
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          secrets: |
+            hangfire_ace_url=${{ secrets.HANGFIRE_ACE_URL }}
+            hangfire_ace_username=${{ secrets.HANGFIRE_ACE_USER }}
+            hangfire_ace_token=${{ secrets.HANGFIRE_ACE_TOKEN }}
+            hangfire_pro_url=${{ secrets.HANGFIRE_PRO_URL }}
+            hangfire_pro_username=${{ secrets.HANGFIRE_PRO_USER }}
+            hangfire_pro_token=${{ secrets.HANGFIRE_PRO_TOKEN }}
   build-docker-event-twitch:
     needs: build-csharp
     name: Build Docker Event (Twitch)
@@ -200,6 +222,13 @@ jobs:
           tags: streamer-bot-cloud-event-twitch:dev
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          secrets: |
+            hangfire_ace_url=${{ secrets.HANGFIRE_ACE_URL }}
+            hangfire_ace_username=${{ secrets.HANGFIRE_ACE_USER }}
+            hangfire_ace_token=${{ secrets.HANGFIRE_ACE_TOKEN }}
+            hangfire_pro_url=${{ secrets.HANGFIRE_PRO_URL }}
+            hangfire_pro_username=${{ secrets.HANGFIRE_PRO_USER }}
+            hangfire_pro_token=${{ secrets.HANGFIRE_PRO_TOKEN }}
   build-docker-event-discord:
     needs: build-csharp
     name: Build Docker Event (Discord)
@@ -224,6 +253,13 @@ jobs:
           tags: streamer-bot-cloud-event-discord:dev
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          secrets: |
+            hangfire_ace_url=${{ secrets.HANGFIRE_ACE_URL }}
+            hangfire_ace_username=${{ secrets.HANGFIRE_ACE_USER }}
+            hangfire_ace_token=${{ secrets.HANGFIRE_ACE_TOKEN }}
+            hangfire_pro_url=${{ secrets.HANGFIRE_PRO_URL }}
+            hangfire_pro_username=${{ secrets.HANGFIRE_PRO_USER }}
+            hangfire_pro_token=${{ secrets.HANGFIRE_PRO_TOKEN }}
   build-docker-event-youtube:
     needs: build-csharp
     name: Build Docker Event (YouTube)
@@ -248,6 +284,13 @@ jobs:
           tags: streamer-bot-cloud-event-youtube:dev
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          secrets: |
+            hangfire_ace_url=${{ secrets.HANGFIRE_ACE_URL }}
+            hangfire_ace_username=${{ secrets.HANGFIRE_ACE_USER }}
+            hangfire_ace_token=${{ secrets.HANGFIRE_ACE_TOKEN }}
+            hangfire_pro_url=${{ secrets.HANGFIRE_PRO_URL }}
+            hangfire_pro_username=${{ secrets.HANGFIRE_PRO_USER }}
+            hangfire_pro_token=${{ secrets.HANGFIRE_PRO_TOKEN }}
   build-docker-bot-twitch:
     needs: build-csharp
     name: Build Docker Bot (Twitch)
@@ -272,6 +315,13 @@ jobs:
           tags: streamer-bot-cloud-bot-twitch:dev
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          secrets: |
+            hangfire_ace_url=${{ secrets.HANGFIRE_ACE_URL }}
+            hangfire_ace_username=${{ secrets.HANGFIRE_ACE_USER }}
+            hangfire_ace_token=${{ secrets.HANGFIRE_ACE_TOKEN }}
+            hangfire_pro_url=${{ secrets.HANGFIRE_PRO_URL }}
+            hangfire_pro_username=${{ secrets.HANGFIRE_PRO_USER }}
+            hangfire_pro_token=${{ secrets.HANGFIRE_PRO_TOKEN }}
   build-docker-bot-discord:
     needs: build-csharp
     name: Build Docker Bot (Discord)
@@ -296,6 +346,13 @@ jobs:
           tags: streamer-bot-cloud-bot-discord:dev
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          secrets: |
+            hangfire_ace_url=${{ secrets.HANGFIRE_ACE_URL }}
+            hangfire_ace_username=${{ secrets.HANGFIRE_ACE_USER }}
+            hangfire_ace_token=${{ secrets.HANGFIRE_ACE_TOKEN }}
+            hangfire_pro_url=${{ secrets.HANGFIRE_PRO_URL }}
+            hangfire_pro_username=${{ secrets.HANGFIRE_PRO_USER }}
+            hangfire_pro_token=${{ secrets.HANGFIRE_PRO_TOKEN }}
   build-docker-bot-youtube:
     needs: build-csharp
     name: Build Docker Bot (YouTube)
@@ -320,3 +377,10 @@ jobs:
           tags: streamer-bot-cloud-bot-youtube:dev
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          secrets: |
+            hangfire_ace_url=${{ secrets.HANGFIRE_ACE_URL }}
+            hangfire_ace_username=${{ secrets.HANGFIRE_ACE_USER }}
+            hangfire_ace_token=${{ secrets.HANGFIRE_ACE_TOKEN }}
+            hangfire_pro_url=${{ secrets.HANGFIRE_PRO_URL }}
+            hangfire_pro_username=${{ secrets.HANGFIRE_PRO_USER }}
+            hangfire_pro_token=${{ secrets.HANGFIRE_PRO_TOKEN }}
