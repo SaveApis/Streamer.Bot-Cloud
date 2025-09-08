@@ -11,6 +11,7 @@ spec:
     organization: saveapis
     project: streamer.bot-cloud
     app: bot-discord
+    type: backend
   ports:
     - protocol: TCP
       port: 8080

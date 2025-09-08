@@ -1,11 +1,12 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: bot-discord
+  name: bot-discord-backend
   labels:
     organization: saveapis
     project: streamer.bot-cloud
     app: bot-discord
+    type: backend
 spec:
   replicas: 1
   selector:
@@ -13,20 +14,22 @@ spec:
       organization: saveapis
       project: streamer.bot-cloud
       app: bot-discord
+      type: backend
   template:
     metadata:
-      name: bot-discord
+      name: bot-discord-backend
       labels:
         organization: saveapis
         project: streamer.bot-cloud
         app: bot-discord
+        type: backend
     spec:
       initContainers:
         - name: wait-for-middleware
           image: busybox:1.37.0
           command: [ 'sh', '-c', 'until nc -z -v -w30 middleware.streamer-bot-cloud-%ENVIRONMENT%.svc.cluster.local 8080; do echo "Waiting for middleware..."; sleep 5; done;' ]
       containers:
-        - name: bot-discord
+        - name: bot-discord-backend
           image: registry.digitalocean.com/saveapis/streamer-bot-cloud-bot-discord:%VERSION%
           imagePullPolicy: IfNotPresent
           ports:
@@ -38,6 +41,32 @@ spec:
                 configMapKeyRef:
                   name: core
                   key: environment
+                  optional: false
+            - name: application_type
+              value: backend
+            - name: Hangfire__Redis__Host
+              valueFrom:
+                secretKeyRef:
+                  name: valkey
+                  key: host
+                  optional: false
+            - name: Hangfire__Redis__Port
+              valueFrom:
+                secretKeyRef:
+                  name: valkey
+                  key: port
+                  optional: false
+            - name: Hangfire__Redis__UserName
+              valueFrom:
+                secretKeyRef:
+                  name: valkey
+                  key: username
+                  optional: false
+            - name: Hangfire__Redis__Password
+              valueFrom:
+                secretKeyRef:
+                  name: valkey
+                  key: password
                   optional: false
       restartPolicy: Always
       

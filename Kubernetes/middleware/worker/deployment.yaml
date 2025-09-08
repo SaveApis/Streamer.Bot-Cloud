@@ -1,0 +1,87 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: middleware-worker
+  labels:
+    organization: saveapis
+    project: streamer.bot-cloud
+    app: middleware
+    type: worker
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      organization: saveapis
+      project: streamer.bot-cloud
+      app: middleware
+      type: worker
+  template:
+    metadata:
+      name: middleware-worker
+      labels:
+        organization: saveapis
+        project: streamer.bot-cloud
+        app: middleware
+        type: worker
+    spec:
+      initContainers:
+        - name: wait-for-event-twitch
+          image: busybox:1.37.0
+          command: [ 'sh', '-c', 'until nc -z -v -w30 event-twitch.streamer-bot-cloud-%ENVIRONMENT%.svc.cluster.local 8080; do echo "Waiting for event twitch..."; sleep 5; done;' ]
+        - name: wait-for-event-discord
+          image: busybox:1.37.0
+          command: [ 'sh', '-c', 'until nc -z -v -w30 event-discord.streamer-bot-cloud-%ENVIRONMENT%.svc.cluster.local 8080; do echo "Waiting for event discord..."; sleep 5; done;' ]
+        - name: wait-for-event-youtube
+          image: busybox:1.37.0
+          command: [ 'sh', '-c', 'until nc -z -v -w30 event-youtube.streamer-bot-cloud-%ENVIRONMENT%.svc.cluster.local 8080; do echo "Waiting for event youtube..."; sleep 5; done;' ]
+        - name: wait-for-bot-twitch
+          image: busybox:1.37.0
+          command: [ 'sh', '-c', 'until nc -z -v -w30 bot-twitch.streamer-bot-cloud-%ENVIRONMENT%.svc.cluster.local 8080; do echo "Waiting for bot twitch..."; sleep 5; done;' ]
+        - name: wait-for-bot-discord
+          image: busybox:1.37.0
+          command: [ 'sh', '-c', 'until nc -z -v -w30 bot-discord.streamer-bot-cloud-%ENVIRONMENT%.svc.cluster.local 8080; do echo "Waiting for bot discord..."; sleep 5; done;' ]
+        - name: wait-for-bot-youtube
+          image: busybox:1.37.0
+          command: [ 'sh', '-c', 'until nc -z -v -w30 bot-youtube.streamer-bot-cloud-%ENVIRONMENT%.svc.cluster.local 8080; do echo "Waiting for bot youtube..."; sleep 5; done;' ]
+      containers:
+        - name: middleware-worker
+          image: registry.digitalocean.com/saveapis/streamer-bot-cloud-middleware:%VERSION%
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          env:
+            - name: aspnetcore_environment
+              valueFrom:
+                configMapKeyRef:
+                  name: core
+                  key: environment
+                  optional: false
+            - name: application_type
+              value: worker
+            - name: Hangfire__Redis__Host
+              valueFrom:
+                secretKeyRef:
+                  name: valkey
+                  key: host
+                  optional: false
+            - name: Hangfire__Redis__Port
+              valueFrom:
+                secretKeyRef:
+                  name: valkey
+                  key: port
+                  optional: false
+            - name: Hangfire__Redis__UserName
+              valueFrom:
+                secretKeyRef:
+                  name: valkey
+                  key: username
+                  optional: false
+            - name: Hangfire__Redis__Password
+              valueFrom:
+                secretKeyRef:
+                  name: valkey
+                  key: password
+                  optional: false
+      restartPolicy: Always
+      

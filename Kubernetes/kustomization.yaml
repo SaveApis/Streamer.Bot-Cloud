@@ -2,22 +2,44 @@ namespace: streamer-bot-cloud-%ENVIRONMENT%
 resources:
   - namespace.yaml
   - ingress.yaml
-  - middleware/deployment.yaml
-  - middleware/service.yaml
-  - event/twitch/deployment.yaml
-  - event/twitch/service.yaml
-  - event/discord/deployment.yaml
-  - event/discord/service.yaml
-  - event/youtube/deployment.yaml
-  - event/youtube/service.yaml
-  - bot/twitch/deployment.yaml
-  - bot/twitch/service.yaml
-  - bot/discord/deployment.yaml
-  - bot/discord/service.yaml
-  - bot/youtube/deployment.yaml
-  - bot/youtube/service.yaml
+  - middleware/backend/deployment.yaml
+  - middleware/backend/service.yaml
+  - middleware/server/deployment.yaml
+  - middleware/worker/deployment.yaml
+  - event/twitch/backend/deployment.yaml
+  - event/twitch/backend/service.yaml
+  - event/twitch/server/deployment.yaml
+  - event/twitch/worker/deployment.yaml
+  - event/discord/backend/deployment.yaml
+  - event/discord/backend/service.yaml
+  - event/discord/server/deployment.yaml
+  - event/discord/worker/deployment.yaml
+  - event/youtube/backend/deployment.yaml
+  - event/youtube/backend/service.yaml
+  - event/youtube/server/deployment.yaml
+  - event/youtube/worker/deployment.yaml
+  - bot/twitch/backend/deployment.yaml
+  - bot/twitch/backend/service.yaml
+  - bot/twitch/server/deployment.yaml
+  - bot/twitch/worker/deployment.yaml
+  - bot/discord/backend/deployment.yaml
+  - bot/discord/backend/service.yaml
+  - bot/discord/server/deployment.yaml
+  - bot/discord/worker/deployment.yaml
+  - bot/youtube/backend/deployment.yaml
+  - bot/youtube/backend/service.yaml
+  - bot/youtube/server/deployment.yaml
+  - bot/youtube/worker/deployment.yaml
 
 configMapGenerator:
   - name: core
     literals:
       - environment=%ENVIRONMENT%
+
+secretGenerator:
+  - name: valkey
+    literals:
+      - host=%VALKEY_HOST%
+      - port=%VALKEY_PORT%
+      - username=%VALKEY_USERNAME%
+      - password=%VALKEY_PASSWORD%

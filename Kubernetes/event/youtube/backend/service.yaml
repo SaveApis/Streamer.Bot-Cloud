@@ -1,16 +1,17 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: middleware
+  name: event-youtube
   labels:
     organization: saveapis
     project: streamer.bot-cloud
-    app: middleware
+    app: event-youtube
 spec:
   selector:
     organization: saveapis
     project: streamer.bot-cloud
-    app: middleware
+    app: event-youtube
+    type: backend
   ports:
     - protocol: TCP
       port: 8080

@@ -271,22 +271,26 @@ jobs:
           find Kubernetes/ -type f -name '*.yaml' -exec sed -i.bak \
             -e 's|%ENVIRONMENT%|production|g' \
             -e 's|%INGRESS_HOST%|streamer-bot-cloud.saveapis.de|g' \
-            -e 's|%VERSION%|${{ needs.read-version.outputs.version }}|g' {} +
+            -e 's|%VERSION%|${{ needs.read-version.outputs.version }}|g' \
+            -e 's|%VALKEY_HOST%|${{ secrets.VALKEY_HOST }}|g' \
+            -e 's|%VALKEY_PORT%|${{ secrets.VALKEY_PORT }}|g' \
+            -e 's|%VALKEY_USERNAME%|${{ secrets.VALKEY_USERNAME }}|g' \
+            -e 's|%VALKEY_PASSWORD%|${{ secrets.VALKEY_PASSWORD }}|g' {} +
       - name: Find changed files
         run: find Kubernetes/ -type f -name '*.yaml.bak'
       - name: Deploy to kubernetes
         run: kubectl apply -k Kubernetes/
       - name: Verify Deployment (Middleware)
-        run: kubectl rollout status deployment/middleware -n streamer-bot-cloud-production
+        run: kubectl rollout status deployment/middleware-backend -n streamer-bot-cloud-production
       - name: Verify Deployment (Event Twitch)
-        run: kubectl rollout status deployment/event-twitch -n streamer-bot-cloud-production
+        run: kubectl rollout status deployment/event-twitch-backend -n streamer-bot-cloud-production
       - name: Verify Deployment (Event Discord)
-        run: kubectl rollout status deployment/event-discord -n streamer-bot-cloud-production
+        run: kubectl rollout status deployment/event-discord-backend -n streamer-bot-cloud-production
       - name: Verify Deployment (Event YouTube)
-        run: kubectl rollout status deployment/event-youtube -n streamer-bot-cloud-production
+        run: kubectl rollout status deployment/event-youtube-backend -n streamer-bot-cloud-production
       - name: Verify Deployment (Bot Twitch)
-        run: kubectl rollout status deployment/bot-twitch -n streamer-bot-cloud-production
+        run: kubectl rollout status deployment/bot-twitch-backend -n streamer-bot-cloud-production
       - name: Verify Deployment (Bot Discord)
-        run: kubectl rollout status deployment/bot-discord -n streamer-bot-cloud-production
+        run: kubectl rollout status deployment/bot-discord-backend -n streamer-bot-cloud-production
       - name: Verify Deployment (Bot YouTube)
-        run: kubectl rollout status deployment/bot-youtube -n streamer-bot-cloud-production
+        run: kubectl rollout status deployment/bot-youtube-backend -n streamer-bot-cloud-production

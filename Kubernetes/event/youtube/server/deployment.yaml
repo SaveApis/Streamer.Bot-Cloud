@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: event-youtube-server
+  labels:
+    organization: saveapis
+    project: streamer.bot-cloud
+    app: event-youtube
+    type: server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      organization: saveapis
+      project: streamer.bot-cloud
+      app: event-youtube
+      type: server
+  template:
+    metadata:
+      name: event-youtube-server
+      labels:
+        organization: saveapis
+        project: streamer.bot-cloud
+        app: event-youtube
+        type: server
+    spec:
+      containers:
+        - name: event-youtube-server
+          image: registry.digitalocean.com/saveapis/streamer-bot-cloud-event-youtube:%VERSION%
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          env:
+            - name: aspnetcore_environment
+              valueFrom:
+                configMapKeyRef:
+                  name: core
+                  key: environment
+                  optional: false
+            - name: application_type
+              value: server
+            - name: Hangfire__Redis__Host
+              valueFrom:
+                secretKeyRef:
+                  name: valkey
+                  key: host
+                  optional: false
+            - name: Hangfire__Redis__Port
+              valueFrom:
+                secretKeyRef:
+                  name: valkey
+                  key: port
+                  optional: false
+            - name: Hangfire__Redis__UserName
+              valueFrom:
+                secretKeyRef:
+                  name: valkey
+                  key: username
+                  optional: false
+            - name: Hangfire__Redis__Password
+              valueFrom:
+                secretKeyRef:
+                  name: valkey
+                  key: password
+                  optional: false
+      restartPolicy: Always
+      
