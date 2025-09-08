@@ -1,21 +1,30 @@
 using System.Reflection;
 using Correlate.AspNetCore;
 using Software.Core.Infrastructure.Extensions;
+using Utils.Hangfire.Domain.Types;
+using Utils.Hangfire.Infrastructure.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.ConfigureSaveApis(Assembly.GetExecutingAssembly());
+builder.Services.AddAuthorization();
+builder.ConfigureSaveApis(Assembly.GetExecutingAssembly(), out var applicationType);
 
 var app = builder.Build();
 
-app.UseSwagger();
-app.UseSwaggerUI(options => options.SupportedSubmitMethods());
+if (applicationType == ApplicationType.Backend)
+{
+    app.UseSwagger();
+    app.UseSwaggerUI(options => options.SupportedSubmitMethods());
 
-app.UseCorrelate();
+    await app.UseDefaultHangfireDashboard().ConfigureAwait(false);
 
-app.UseAuthentication();
-app.UseAuthorization();
+    app.UseCorrelate();
 
-app.MapControllers();
+    app.UseAuthentication();
+    app.UseAuthorization();
 
-app.Run();
+    app.MapControllers();
+}
+
+await app.StartAsync().ConfigureAwait(false);
+await app.WaitForShutdownAsync().ConfigureAwait(false);
