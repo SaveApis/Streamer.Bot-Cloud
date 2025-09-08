@@ -53,6 +53,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utils.Swagger", "src\Librar
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utils.Mediator", "src\Libraries\Utils\Utils.Mediator\Utils.Mediator.csproj", "{36405A34-459B-4551-A5C5-A4443E69EDD8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utils.Hangfire", "src\Libraries\Utils\Utils.Hangfire\Utils.Hangfire.csproj", "{8F7F7253-525E-4F0A-8673-49FDBFE84ADA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -267,6 +269,18 @@ Global
 		{36405A34-459B-4551-A5C5-A4443E69EDD8}.Release|x64.Build.0 = Release|Any CPU
 		{36405A34-459B-4551-A5C5-A4443E69EDD8}.Release|x86.ActiveCfg = Release|Any CPU
 		{36405A34-459B-4551-A5C5-A4443E69EDD8}.Release|x86.Build.0 = Release|Any CPU
+		{8F7F7253-525E-4F0A-8673-49FDBFE84ADA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F7F7253-525E-4F0A-8673-49FDBFE84ADA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8F7F7253-525E-4F0A-8673-49FDBFE84ADA}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{8F7F7253-525E-4F0A-8673-49FDBFE84ADA}.Debug|x64.Build.0 = Debug|Any CPU
+		{8F7F7253-525E-4F0A-8673-49FDBFE84ADA}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{8F7F7253-525E-4F0A-8673-49FDBFE84ADA}.Debug|x86.Build.0 = Debug|Any CPU
+		{8F7F7253-525E-4F0A-8673-49FDBFE84ADA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F7F7253-525E-4F0A-8673-49FDBFE84ADA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8F7F7253-525E-4F0A-8673-49FDBFE84ADA}.Release|x64.ActiveCfg = Release|Any CPU
+		{8F7F7253-525E-4F0A-8673-49FDBFE84ADA}.Release|x64.Build.0 = Release|Any CPU
+		{8F7F7253-525E-4F0A-8673-49FDBFE84ADA}.Release|x86.ActiveCfg = Release|Any CPU
+		{8F7F7253-525E-4F0A-8673-49FDBFE84ADA}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -295,5 +309,6 @@ Global
 		{DF53861A-C7A5-4BB9-8DFF-F98058C147F6} = {969279D8-5F47-E7B5-2176-08E438573501}
 		{78FBA3A0-561C-4639-A831-AC1947532782} = {969279D8-5F47-E7B5-2176-08E438573501}
 		{36405A34-459B-4551-A5C5-A4443E69EDD8} = {969279D8-5F47-E7B5-2176-08E438573501}
+		{8F7F7253-525E-4F0A-8673-49FDBFE84ADA} = {969279D8-5F47-E7B5-2176-08E438573501}
 	EndGlobalSection
 EndGlobal

@@ -1,82 +1,320 @@
 ﻿services:
-  middleware:
-    hostname: middleware
-    container_name: middleware
+  middleware-backend:
+    depends_on:
+      valkey:
+        condition: service_healthy
+    hostname: middleware-backend
+    container_name: middleware-backend
     image: streamer-bot-cloud-middleware:dev
     build:
       context: ..
       dockerfile: src/Software/Software.Middleware/Dockerfile
+    environment:
+      application_type: backend
     ports:
       - "5000:8080"
-  event-twitch:
+  middleware-server:
     depends_on:
-      middleware:
+      valkey:
+        condition: service_healthy
+    hostname: middleware-server
+    container_name: middleware-server
+    image: streamer-bot-cloud-middleware:dev
+    build:
+      context: ..
+      dockerfile: src/Software/Software.Middleware/Dockerfile
+    environment:
+      application_type: server
+  middleware-worker:
+    depends_on:
+      valkey:
+        condition: service_healthy
+      event-twitch-backend:
         condition: service_started
-    hostname: event-twitch
-    container_name: event-twitch
+      event-discord-backend:
+        condition: service_started
+      event-youtube-backend:
+        condition: service_started
+      bot-twitch-backend:
+        condition: service_started
+      bot-discord-backend:
+        condition: service_started
+      bot-youtube-backend:
+        condition: service_started
+    hostname: middleware-worker
+    container_name: middleware-worker
+    image: streamer-bot-cloud-middleware:dev
+    build:
+      context: ..
+      dockerfile: src/Software/Software.Middleware/Dockerfile
+    environment:
+      application_type: worker
+  event-twitch-backend:
+    depends_on:
+      valkey:
+        condition: service_healthy
+      middleware-backend:
+        condition: service_started
+    hostname: event-twitch-backend
+    container_name: event-twitch-backend
     image: streamer-bot-cloud-event-twitch:dev
     build:
       context: ..
       dockerfile: src/Software/Event/Software.Event.Twitch/Dockerfile
+    environment:
+      application_type: backend
     ports:
       - "6000:8080"
-  event-discord:
+  event-twitch-server:
     depends_on:
-      middleware:
+      valkey:
+        condition: service_healthy
+    hostname: event-twitch-server
+    container_name: event-twitch-server
+    image: streamer-bot-cloud-event-twitch:dev
+    build:
+      context: ..
+      dockerfile: src/Software/Event/Software.Event.Twitch/Dockerfile
+    environment:
+      application_type: server
+  event-twitch-worker:
+    depends_on:
+      valkey:
+        condition: service_healthy
+      middleware-backend:
         condition: service_started
-    hostname: event-discord
-    container_name: event-discord
+    hostname: event-twitch-worker
+    container_name: event-twitch-worker
+    image: streamer-bot-cloud-event-twitch:dev
+    build:
+      context: ..
+      dockerfile: src/Software/Event/Software.Event.Twitch/Dockerfile
+    environment:
+      application_type: worker
+  event-discord-backend:
+    depends_on:
+      valkey:
+        condition: service_healthy
+      middleware-backend:
+        condition: service_started
+    hostname: event-discord-backend
+    container_name: event-discord-backend
     image: streamer-bot-cloud-event-discord:dev
     build:
       context: ..
       dockerfile: src/Software/Event/Software.Event.Discord/Dockerfile
+    environment:
+      application_type: backend
     ports:
       - "6001:8080"
-  event-youtube:
+  event-discord-server:
     depends_on:
-      middleware:
+      valkey:
+        condition: service_healthy
+    hostname: event-discord-server
+    container_name: event-discord-server
+    image: streamer-bot-cloud-event-discord:dev
+    build:
+      context: ..
+      dockerfile: src/Software/Event/Software.Event.Discord/Dockerfile
+    environment:
+      application_type: server
+  event-discord-worker:
+    depends_on:
+      valkey:
+        condition: service_healthy
+      middleware-backend:
         condition: service_started
-    hostname: event-youtube
-    container_name: event-youtube
+    hostname: event-discord-worker
+    container_name: event-discord-worker
+    image: streamer-bot-cloud-event-discord:dev
+    build:
+      context: ..
+      dockerfile: src/Software/Event/Software.Event.Discord/Dockerfile
+    environment:
+      application_type: worker
+  event-youtube-backend:
+    depends_on:
+      valkey:
+        condition: service_healthy
+      middleware-backend:
+        condition: service_started
+    hostname: event-youtube-backend
+    container_name: event-youtube-backend
     image: streamer-bot-cloud-event-youtube:dev
     build:
       context: ..
       dockerfile: src/Software/Event/Software.Event.YouTube/Dockerfile
+    environment:
+      application_type: backend
     ports:
       - "6002:8080"
-  bot-twitch:
+  event-youtube-server:
     depends_on:
-      middleware:
+      valkey:
+        condition: service_healthy
+    hostname: event-youtube-server
+    container_name: event-youtube-server
+    image: streamer-bot-cloud-event-youtube:dev
+    build:
+      context: ..
+      dockerfile: src/Software/Event/Software.Event.YouTube/Dockerfile
+    environment:
+      application_type: server
+  event-youtube-worker:
+    depends_on:
+      valkey:
+        condition: service_healthy
+      middleware-backend:
         condition: service_started
-    hostname: bot-twitch
-    container_name: bot-twitch
+    hostname: event-youtube-worker
+    container_name: event-youtube-worker
+    image: streamer-bot-cloud-event-youtube:dev
+    build:
+      context: ..
+      dockerfile: src/Software/Event/Software.Event.YouTube/Dockerfile
+    environment:
+      application_type: worker
+  bot-twitch-backend:
+    depends_on:
+      valkey:
+        condition: service_healthy
+      middleware-backend:
+        condition: service_started
+    hostname: bot-twitch-backend
+    container_name: bot-twitch-backend
     image: streamer-bot-cloud-bot-twitch:dev
     build:
       context: ..
       dockerfile: src/Software/Bot/Software.Bot.Twitch/Dockerfile
+    environment:
+      application_type: backend
     ports:
       - "7000:8080"
-  bot-discord:
+  bot-twitch-server:
     depends_on:
-      middleware:
+      valkey:
+        condition: service_healthy
+    hostname: bot-twitch-server
+    container_name: bot-twitch-server
+    image: streamer-bot-cloud-bot-twitch:dev
+    build:
+      context: ..
+      dockerfile: src/Software/Bot/Software.Bot.Twitch/Dockerfile
+    environment:
+      application_type: server
+  bot-twitch-worker:
+    depends_on:
+      valkey:
+        condition: service_healthy
+      middleware-backend:
         condition: service_started
-    hostname: bot-discord
-    container_name: bot-discord
+    hostname: bot-twitch-worker
+    container_name: bot-twitch-worker
+    image: streamer-bot-cloud-bot-twitch:dev
+    build:
+      context: ..
+      dockerfile: src/Software/Bot/Software.Bot.Twitch/Dockerfile
+    environment:
+      application_type: worker
+  bot-discord-backend:
+    depends_on:
+      valkey:
+        condition: service_healthy
+      middleware-backend:
+        condition: service_started
+    hostname: bot-discord-backend
+    container_name: bot-discord-backend
     image: streamer-bot-cloud-bot-discord:dev
     build:
       context: ..
       dockerfile: src/Software/Bot/Software.Bot.Discord/Dockerfile
+    environment:
+      application_type: backend
     ports:
       - "7001:8080"
-  bot-youtube:
+  bot-discord-server:
     depends_on:
-      middleware:
+      valkey:
+        condition: service_healthy
+    hostname: bot-discord-server
+    container_name: bot-discord-server
+    image: streamer-bot-cloud-bot-discord:dev
+    build:
+      context: ..
+      dockerfile: src/Software/Bot/Software.Bot.Discord/Dockerfile
+    environment:
+      application_type: server
+  bot-discord-worker:
+    depends_on:
+      valkey:
+        condition: service_healthy
+      middleware-backend:
         condition: service_started
-    hostname: bot-youtube
-    container_name: bot-youtube
+    hostname: bot-discord-worker
+    container_name: bot-discord-worker
+    image: streamer-bot-cloud-bot-discord:dev
+    build:
+      context: ..
+      dockerfile: src/Software/Bot/Software.Bot.Discord/Dockerfile
+    environment:
+      application_type: worker
+  bot-youtube-backend:
+    depends_on:
+      valkey:
+        condition: service_healthy
+      middleware-backend:
+        condition: service_started
+    hostname: bot-youtube-backend
+    container_name: bot-youtube-backend
     image: streamer-bot-cloud-bot-youtube:dev
     build:
       context: ..
       dockerfile: src/Software/Bot/Software.Bot.YouTube/Dockerfile
+    environment:
+      application_type: backend
     ports:
       - "7002:8080"
+  bot-youtube-server:
+    depends_on:
+      valkey:
+        condition: service_healthy
+    hostname: bot-youtube-server
+    container_name: bot-youtube-server
+    image: streamer-bot-cloud-bot-youtube:dev
+    build:
+      context: ..
+      dockerfile: src/Software/Bot/Software.Bot.YouTube/Dockerfile
+    environment:
+      application_type: server
+  bot-youtube-worker:
+    depends_on:
+      valkey:
+        condition: service_healthy
+      middleware-backend:
+        condition: service_started
+    hostname: bot-youtube-worker
+    container_name: bot-youtube-worker
+    image: streamer-bot-cloud-bot-youtube:dev
+    build:
+      context: ..
+      dockerfile: src/Software/Bot/Software.Bot.YouTube/Dockerfile
+    environment:
+      application_type: worker
+  
+  valkey:
+    hostname: valkey
+    container_name: valkey
+    image: valkey/valkey:8.1.3-alpine
+    volumes:
+      - valkey-data:/data
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 1s
+      timeout: 5s
+      retries: 30
+
+volumes:
+  valkey-data:

@@ -7,13 +7,27 @@
         <option name="commandLineOptions" value="--build" />
         <option name="services">
           <list>
-            <option value="middleware" />
-            <option value="event-youtube" />
-            <option value="event-twitch" />
-            <option value="event-discord" />
-            <option value="bot-youtube" />
-            <option value="bot-twitch" />
-            <option value="bot-discord" />
+            <option value="middleware-worker" />
+            <option value="middleware-server" />
+            <option value="middleware-backend" />
+            <option value="event-youtube-worker" />
+            <option value="event-youtube-server" />
+            <option value="event-youtube-backend" />
+            <option value="event-twitch-worker" />
+            <option value="event-twitch-server" />
+            <option value="event-twitch-backend" />
+            <option value="event-discord-worker" />
+            <option value="event-discord-server" />
+            <option value="event-discord-backend" />
+            <option value="bot-youtube-worker" />
+            <option value="bot-youtube-server" />
+            <option value="bot-youtube-backend" />
+            <option value="bot-twitch-worker" />
+            <option value="bot-twitch-server" />
+            <option value="bot-twitch-backend" />
+            <option value="bot-discord-worker" />
+            <option value="bot-discord-server" />
+            <option value="bot-discord-backend" />
           </list>
         </option>
         <option name="sourceFilePath" value="Docker/docker-compose.yml" />

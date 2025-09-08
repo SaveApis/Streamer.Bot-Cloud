@@ -52,6 +52,13 @@ jobs:
           context: .
           file: src/Software/Software.Middleware/Dockerfile
           tags: registry.digitalocean.com/saveapis/streamer-bot-cloud-middleware:${{ needs.read-version.outputs.version }}
+          secrets: |
+            hangfire_ace_url=${{ secrets.HANGFIRE_ACE_URL }}
+            hangfire_ace_username=${{ secrets.HANGFIRE_ACE_USER }}
+            hangfire_ace_token=${{ secrets.HANGFIRE_ACE_TOKEN }}
+            hangfire_pro_url=${{ secrets.HANGFIRE_PRO_URL }}
+            hangfire_pro_username=${{ secrets.HANGFIRE_PRO_USER }}
+            hangfire_pro_token=${{ secrets.HANGFIRE_PRO_TOKEN }}
   docker-event-twitch:
     needs: read-version
     name: Deploy Docker Event (Twitch)
@@ -76,6 +83,13 @@ jobs:
           context: .
           file: src/Software/Event/Software.Event.Twitch/Dockerfile
           tags: registry.digitalocean.com/saveapis/streamer-bot-cloud-event-twitch:${{ needs.read-version.outputs.version }}
+          secrets: |
+            hangfire_ace_url=${{ secrets.HANGFIRE_ACE_URL }}
+            hangfire_ace_username=${{ secrets.HANGFIRE_ACE_USER }}
+            hangfire_ace_token=${{ secrets.HANGFIRE_ACE_TOKEN }}
+            hangfire_pro_url=${{ secrets.HANGFIRE_PRO_URL }}
+            hangfire_pro_username=${{ secrets.HANGFIRE_PRO_USER }}
+            hangfire_pro_token=${{ secrets.HANGFIRE_PRO_TOKEN }}
   docker-event-discord:
     needs: read-version
     name: Deploy Docker Event (Discord)
@@ -100,6 +114,13 @@ jobs:
           context: .
           file: src/Software/Event/Software.Event.Discord/Dockerfile
           tags: registry.digitalocean.com/saveapis/streamer-bot-cloud-event-discord:${{ needs.read-version.outputs.version }}
+          secrets: |
+            hangfire_ace_url=${{ secrets.HANGFIRE_ACE_URL }}
+            hangfire_ace_username=${{ secrets.HANGFIRE_ACE_USER }}
+            hangfire_ace_token=${{ secrets.HANGFIRE_ACE_TOKEN }}
+            hangfire_pro_url=${{ secrets.HANGFIRE_PRO_URL }}
+            hangfire_pro_username=${{ secrets.HANGFIRE_PRO_USER }}
+            hangfire_pro_token=${{ secrets.HANGFIRE_PRO_TOKEN }}
   docker-event-youtube:
     needs: read-version
     name: Deploy Docker Event (YouTube)
@@ -124,6 +145,13 @@ jobs:
           context: .
           file: src/Software/Event/Software.Event.YouTube/Dockerfile
           tags: registry.digitalocean.com/saveapis/streamer-bot-cloud-event-youtube:${{ needs.read-version.outputs.version }}
+          secrets: |
+            hangfire_ace_url=${{ secrets.HANGFIRE_ACE_URL }}
+            hangfire_ace_username=${{ secrets.HANGFIRE_ACE_USER }}
+            hangfire_ace_token=${{ secrets.HANGFIRE_ACE_TOKEN }}
+            hangfire_pro_url=${{ secrets.HANGFIRE_PRO_URL }}
+            hangfire_pro_username=${{ secrets.HANGFIRE_PRO_USER }}
+            hangfire_pro_token=${{ secrets.HANGFIRE_PRO_TOKEN }}
   docker-bot-twitch:
     needs: read-version
     name: Deploy Docker Bot (Twitch)
@@ -148,6 +176,13 @@ jobs:
           context: .
           file: src/Software/Bot/Software.Bot.Twitch/Dockerfile
           tags: registry.digitalocean.com/saveapis/streamer-bot-cloud-bot-twitch:${{ needs.read-version.outputs.version }}
+          secrets: |
+            hangfire_ace_url=${{ secrets.HANGFIRE_ACE_URL }}
+            hangfire_ace_username=${{ secrets.HANGFIRE_ACE_USER }}
+            hangfire_ace_token=${{ secrets.HANGFIRE_ACE_TOKEN }}
+            hangfire_pro_url=${{ secrets.HANGFIRE_PRO_URL }}
+            hangfire_pro_username=${{ secrets.HANGFIRE_PRO_USER }}
+            hangfire_pro_token=${{ secrets.HANGFIRE_PRO_TOKEN }}
   docker-bot-discord:
     needs: read-version
     name: Deploy Docker Bot (Discord)
@@ -172,6 +207,13 @@ jobs:
           context: .
           file: src/Software/Bot/Software.Bot.Discord/Dockerfile
           tags: registry.digitalocean.com/saveapis/streamer-bot-cloud-bot-discord:${{ needs.read-version.outputs.version }}
+          secrets: |
+            hangfire_ace_url=${{ secrets.HANGFIRE_ACE_URL }}
+            hangfire_ace_username=${{ secrets.HANGFIRE_ACE_USER }}
+            hangfire_ace_token=${{ secrets.HANGFIRE_ACE_TOKEN }}
+            hangfire_pro_url=${{ secrets.HANGFIRE_PRO_URL }}
+            hangfire_pro_username=${{ secrets.HANGFIRE_PRO_USER }}
+            hangfire_pro_token=${{ secrets.HANGFIRE_PRO_TOKEN }}
   docker-bot-youtube:
     needs: read-version
     name: Deploy Docker Bot (YouTube)
@@ -196,6 +238,13 @@ jobs:
           context: .
           file: src/Software/Bot/Software.Bot.YouTube/Dockerfile
           tags: registry.digitalocean.com/saveapis/streamer-bot-cloud-bot-youtube:${{ needs.read-version.outputs.version }}
+          secrets: |
+            hangfire_ace_url=${{ secrets.HANGFIRE_ACE_URL }}
+            hangfire_ace_username=${{ secrets.HANGFIRE_ACE_USER }}
+            hangfire_ace_token=${{ secrets.HANGFIRE_ACE_TOKEN }}
+            hangfire_pro_url=${{ secrets.HANGFIRE_PRO_URL }}
+            hangfire_pro_username=${{ secrets.HANGFIRE_PRO_USER }}
+            hangfire_pro_token=${{ secrets.HANGFIRE_PRO_TOKEN }}
   kubernetes:
     needs:
       - read-version
@@ -222,22 +271,26 @@ jobs:
           find Kubernetes/ -type f -name '*.yaml' -exec sed -i.bak \
             -e 's|%ENVIRONMENT%|production|g' \
             -e 's|%INGRESS_HOST%|streamer-bot-cloud.saveapis.de|g' \
-            -e 's|%VERSION%|${{ needs.read-version.outputs.version }}|g' {} +
+            -e 's|%VERSION%|${{ needs.read-version.outputs.version }}|g' \
+            -e 's|%VALKEY_HOST%|${{ secrets.VALKEY_HOST }}|g' \
+            -e 's|%VALKEY_PORT%|${{ secrets.VALKEY_PORT }}|g' \
+            -e 's|%VALKEY_USERNAME%|${{ secrets.VALKEY_USERNAME }}|g' \
+            -e 's|%VALKEY_PASSWORD%|${{ secrets.VALKEY_PASSWORD }}|g' {} +
       - name: Find changed files
         run: find Kubernetes/ -type f -name '*.yaml.bak'
       - name: Deploy to kubernetes
         run: kubectl apply -k Kubernetes/
       - name: Verify Deployment (Middleware)
-        run: kubectl rollout status deployment/middleware -n streamer-bot-cloud-production
+        run: kubectl rollout status deployment/middleware-backend -n streamer-bot-cloud-production
       - name: Verify Deployment (Event Twitch)
-        run: kubectl rollout status deployment/event-twitch -n streamer-bot-cloud-production
+        run: kubectl rollout status deployment/event-twitch-backend -n streamer-bot-cloud-production
       - name: Verify Deployment (Event Discord)
-        run: kubectl rollout status deployment/event-discord -n streamer-bot-cloud-production
+        run: kubectl rollout status deployment/event-discord-backend -n streamer-bot-cloud-production
       - name: Verify Deployment (Event YouTube)
-        run: kubectl rollout status deployment/event-youtube -n streamer-bot-cloud-production
+        run: kubectl rollout status deployment/event-youtube-backend -n streamer-bot-cloud-production
       - name: Verify Deployment (Bot Twitch)
-        run: kubectl rollout status deployment/bot-twitch -n streamer-bot-cloud-production
+        run: kubectl rollout status deployment/bot-twitch-backend -n streamer-bot-cloud-production
       - name: Verify Deployment (Bot Discord)
-        run: kubectl rollout status deployment/bot-discord -n streamer-bot-cloud-production
+        run: kubectl rollout status deployment/bot-discord-backend -n streamer-bot-cloud-production
       - name: Verify Deployment (Bot YouTube)
-        run: kubectl rollout status deployment/bot-youtube -n streamer-bot-cloud-production
+        run: kubectl rollout status deployment/bot-youtube-backend -n streamer-bot-cloud-production
