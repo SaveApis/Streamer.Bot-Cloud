@@ -21,7 +21,7 @@ public class CollectRecurringEventsJob(ILogger<IHangfireJob<ApplicationStartedEv
     {
         var codeEvents = ReadCodeEvents();
         var hangfireEvents = ReadHangfireEvents();
-        
+
         var toAdd = codeEvents.Keys.Except(hangfireEvents.Keys).ToList();
         var toRemove = hangfireEvents.Keys.Except(codeEvents.Keys).ToList();
         var toUpdate = codeEvents.Keys.Intersect(hangfireEvents.Keys).ToList();
@@ -48,7 +48,7 @@ public class CollectRecurringEventsJob(ILogger<IHangfireJob<ApplicationStartedEv
             .ToList();
         await Task.WhenAll(publishTasks);
     }
-    
+
     private Dictionary<string, Tuple<IHangfireRecurringEvent, HangfireRecurringEventAttribute>> ReadCodeEvents()
     {
         var internalDictionary = new Dictionary<string, Tuple<IHangfireRecurringEvent, HangfireRecurringEventAttribute>>();
@@ -60,7 +60,7 @@ public class CollectRecurringEventsJob(ILogger<IHangfireJob<ApplicationStartedEv
                 Logger.LogWarning("Recurring event {RecurringEventType} is missing HangfireRecurringEventAttribute", recurringEvent.GetType().FullName);
                 continue;
             }
-            
+
             if (internalDictionary.TryAdd(attribute.Id, Tuple.Create(recurringEvent, attribute)))
             {
                 continue;
@@ -71,7 +71,7 @@ public class CollectRecurringEventsJob(ILogger<IHangfireJob<ApplicationStartedEv
 
         return internalDictionary;
     }
-    
+
     private Dictionary<string, RecurringJobDto> ReadHangfireEvents()
     {
         var hangfireRecurringEvents = JobStorage.Current.GetConnection().GetRecurringJobs() ?? [];
