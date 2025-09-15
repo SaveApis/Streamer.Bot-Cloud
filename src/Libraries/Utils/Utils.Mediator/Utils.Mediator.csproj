@@ -9,6 +9,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Utils.Core\Utils.Core.csproj" />
+      <ProjectReference Include="..\Utils.Validation\Utils.Validation.csproj" />
     </ItemGroup>
 
     <ItemGroup>
