@@ -8,6 +8,7 @@ using Utils.Correlation;
 using Utils.Mediator;
 using Utils.Rest;
 using Utils.Swagger;
+using Utils.Validation;
 
 namespace Software.Core.Infrastructure.Extensions;
 
@@ -30,6 +31,7 @@ public static class WebApplicationBuilderExtensions
                     containerBuilder.RegisterModule<SwaggerModule>();
 
                     containerBuilder.RegisterModule(new MediatorModule(assemblyHelper));
+                    containerBuilder.RegisterModule(new ValidationModule(assemblyHelper));
                 }
             );
     }
@@ -43,5 +45,6 @@ public static class WebApplicationBuilderExtensions
         yield return typeof(SwaggerModule).Assembly;
 
         yield return typeof(MediatorModule).Assembly;
+        yield return typeof(ValidationModule).Assembly;
     }
 }
