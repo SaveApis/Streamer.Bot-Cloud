@@ -31,7 +31,7 @@ public class HangfireModule(IAssemblyHelper assemblyHelper, IConfiguration confi
         {
             var mediator = scope.Resolve<IMediator>();
 
-            var startedEvent = new ApplicationStartedHangfireEvent();
+            var startedEvent = new ApplicationStartedEvent();
             await mediator.Publish(startedEvent, CancellationToken.None).ConfigureAwait(false);
         });
     }
