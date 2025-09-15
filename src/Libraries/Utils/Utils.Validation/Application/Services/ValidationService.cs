@@ -14,15 +14,7 @@ public class ValidationService(ILifetimeScope lifetimeScope) : IValidationServic
     }
     public ValidationResult Validate<T>(ValidationContext<T> context)
     {
-        var validators = lifetimeScope.Resolve<IEnumerable<IValidator<T>>>().ToList();
-        if (validators.Count == 0)
-        {
-            var logger = lifetimeScope.Resolve<ILogger<ValidationService>>();
-            logger.LogWarning("No validators found for type {Type}", typeof(T).FullName);
-
-            return new ValidationResult();
-        }
-
+        var validators = GetValidators<T>();
         var validationResults = validators.Select(v => v.Validate(context));
 
         return new ValidationResult(validationResults);
@@ -34,18 +26,22 @@ public class ValidationService(ILifetimeScope lifetimeScope) : IValidationServic
     }
     public async Task<ValidationResult> ValidateAsync<T>(ValidationContext<T> context, CancellationToken cancellationToken = default)
     {
+        var validators = GetValidators<T>();
+        var validationResultTasks = validators.Select(v => v.ValidateAsync(context, cancellationToken));
+        var validationResults = await Task.WhenAll(validationResultTasks);
+
+        return new ValidationResult(validationResults);
+    }
+
+    private IReadOnlyCollection<IValidator<T>> GetValidators<T>()
+    {
         var validators = lifetimeScope.Resolve<IEnumerable<IValidator<T>>>().ToList();
         if (validators.Count == 0)
         {
             var logger = lifetimeScope.Resolve<ILogger<ValidationService>>();
             logger.LogWarning("No validators found for type {Type}", typeof(T).FullName);
-
-            return new ValidationResult();
         }
 
-        var validationResultTasks = validators.Select(v => v.ValidateAsync(context, cancellationToken));
-        var validationResults = await Task.WhenAll(validationResultTasks);
-
-        return new ValidationResult(validationResults);
+        return validators.AsReadOnly();
     }
 }

@@ -13,5 +13,5 @@ public class ValidationError<TType>(TType instance, IReadOnlyCollection<Validati
 )
 {
     public TType Instance { get; } = instance;
-    public IReadOnlyCollection<ValidationFailure> Errors { get; } = errors.ToList().AsReadOnly();
+    public IReadOnlyCollection<ValidationFailure> Errors { get; } = errors;
 }

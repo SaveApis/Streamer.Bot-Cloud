@@ -16,7 +16,7 @@ public class StreamValidationBehavior<TRequest, TResponse>(IValidationService va
             yield return new ValidationError<TRequest>(request, requestValidationResult.Errors.ToList().AsReadOnly());
             yield break;
         }
-        
+
         await foreach (var response in next().WithCancellation(cancellationToken).ConfigureAwait(false))
         {
             yield return response;
