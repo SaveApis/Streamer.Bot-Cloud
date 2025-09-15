@@ -12,4 +12,15 @@
       <ProjectReference Include="..\Utils.Mediator\Utils.Mediator.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Hangfire.AspNetCore" Version="1.8.21" />
+      <PackageReference Include="Hangfire.Autofac" Version="2.7.0" />
+      <PackageReference Include="Hangfire.Core" Version="1.8.21" />
+      <PackageReference Include="Hangfire.Correlate" Version="2.2.0" />
+      <PackageReference Include="Hangfire.Pro" Version="3.0.4" />
+      <PackageReference Include="Hangfire.Pro.Redis" Version="3.3.1" />
+      <PackageReference Include="Hangfire.Throttling" Version="1.4.1" />
+      <PackageReference Include="StackExchange.Redis" Version="2.9.17" />
+    </ItemGroup>
+
 </Project>
