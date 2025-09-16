@@ -21,3 +21,11 @@ configMapGenerator:
   - name: core
     literals:
       - environment=%ENVIRONMENT%
+
+secretGenerator:
+  - name: valkey
+    literals:
+      - host=%VALKEY_HOST%
+      - port=%VALKEY_PORT%
+      - username=%VALKEY_USERNAME%
+      - password=%VALKEY_PASSWORD%

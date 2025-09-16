@@ -4,18 +4,18 @@ namespace Utils.Hangfire.Domain.Options;
 
 public class HangfireRedisOption
 {
-    public required string Host { get; init; } //TODO: Has to be set in staging + production via env variables
-    public required int Port { get; init; } //TODO: Has to be set in staging + production via env variables
+    public required string Host { get; init; }
+    public required int Port { get; init; }
     public required int Database { get; init; }
-    public string? UserName { get; init; } //TODO: Has to be set in staging + production via env variables
-    public string? Password { get; init; } //TODO: Has to be set in staging + production via env variables
+    public string? UserName { get; init; }
+    public string? Password { get; init; }
 
     public required bool UseSsl { get; init; }
     public required string Prefix { get; init; }
 
-    public int MaxSucceededListLength { get; init; } = 1_0000_000;
-    public int MaxDeletedListLength { get; init; } = 1_0000_000;
-    public int MaxStateHistoryLength { get; init; } = 1_0000;
+    public int MaxSucceededListLength { get; init; } = 1_000_000;
+    public int MaxDeletedListLength { get; init; } = 1_000_000;
+    public int MaxStateHistoryLength { get; init; } = 1_000;
 
     public override string ToString()
     {
