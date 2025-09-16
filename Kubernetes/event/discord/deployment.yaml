@@ -63,5 +63,11 @@ spec:
                   name: valkey
                   key: password
                   optional: false
+            - name: Hangfire__Redis__UseSsl
+              value: "true"
+            - name: Hangfire__Redis__Prefix
+              value: "%ENVIRONMENT%:hangfire:event:discord:"
+            - name: Hangfire__Dashboard__PrefixPath
+              value: "/api/event/discord"
       restartPolicy: Always
       
