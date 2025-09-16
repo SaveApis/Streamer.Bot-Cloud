@@ -85,14 +85,28 @@ public class HangfireModule(IAssemblyHelper assemblyHelper, IConfiguration confi
                 MaxSucceededListLength = option.Redis.MaxSucceededListLength,
             };
 
+            logger.LogInformation("Set data compatibility level");
             globalConfiguration.SetDataCompatibilityLevel(CompatibilityLevel.Version_180);
+
+            logger.LogInformation("Use simple assembly name type serializer");
             globalConfiguration.UseSimpleAssemblyNameTypeSerializer();
+
+            logger.LogInformation("Use recommended serializer settings");
             globalConfiguration.UseRecommendedSerializerSettings(settings => settings.Converters.Add(new StringEnumConverter()));
+
+            logger.LogInformation("Use redis metrics");
             globalConfiguration.UseRedisMetrics();
+
+            logger.LogInformation("Use redis storage: {configuration}, {options}", option.Redis, JsonSerializer.Serialize(redisOptions));
             globalConfiguration.UseRedisStorage(option.Redis.ToString(), redisOptions);
 
+            logger.LogInformation("Use correlate");
             globalConfiguration.UseCorrelate(provider);
+
+            logger.LogInformation("Use batches");
             globalConfiguration.UseBatches();
+
+            logger.LogInformation("Use throttling");
             globalConfiguration.UseThrottling();
         });
         collection.AddHangfireServer((provider, options) =>
