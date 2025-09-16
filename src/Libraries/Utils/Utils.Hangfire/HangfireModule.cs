@@ -1,3 +1,4 @@
+using System.Text.Json;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Hangfire;
@@ -6,6 +7,7 @@ using Hangfire.Pro.Redis;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Converters;
 using Utils.Core.Infrastructure.Helpers;
@@ -21,6 +23,8 @@ public class HangfireModule(IAssemblyHelper assemblyHelper, IConfiguration confi
 {
     protected override void Load(ContainerBuilder builder)
     {
+        builder.RegisterInstance(GlobalConfiguration.Configuration).As<IGlobalConfiguration>().SingleInstance();
+
         RegisterOptions(builder, configuration);
         RegisterJobs(builder, assemblyHelper);
         RegisterRecurringEvents(builder, assemblyHelper);
@@ -62,8 +66,14 @@ public class HangfireModule(IAssemblyHelper assemblyHelper, IConfiguration confi
 
         collection.AddHangfire((provider, globalConfiguration) =>
         {
+            var logger = provider.GetRequiredService<ILogger<HangfireModule>>();
+
+            logger.LogInformation("Configuring Hangfire...");
             var monitor = provider.GetRequiredService<IOptionsMonitor<HangfireOption>>();
             var option = monitor.CurrentValue;
+            var serializedOption = JsonSerializer.Serialize(option);
+            logger.LogInformation("Hangfire configuration: {option}", serializedOption);
+
             var redisOptions = new RedisStorageOptions
             {
                 Database = option.Redis.Database,
