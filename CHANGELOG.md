@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [versionize](https://github.com/versionize/versionize) for commit guidelines.
 
+<a name="1.2.0"></a>
+## [1.2.0](https://www.github.com/SaveApis/Streamer.Bot-Cloud/releases/tag/v1.2.0) (2025-09-16)
+
+### ✨ Features
+
+* Hangfire Module ([#21](https://www.github.com/SaveApis/Streamer.Bot-Cloud/issues/21)) ([60b9b3e](https://www.github.com/SaveApis/Streamer.Bot-Cloud/commit/60b9b3e08814933db05b822d84ae753127fffbe6))
+* Mediator Module ([#14](https://www.github.com/SaveApis/Streamer.Bot-Cloud/issues/14)) ([4eb2107](https://www.github.com/SaveApis/Streamer.Bot-Cloud/commit/4eb21075660046361b5185812985162538ce2642))
+* Validation module ([#20](https://www.github.com/SaveApis/Streamer.Bot-Cloud/issues/20)) ([1ca2b7b](https://www.github.com/SaveApis/Streamer.Bot-Cloud/commit/1ca2b7b929e3a3c15774de853e0c3e5135622b99))
+
+### 🐛 Bug Fixes
+
+* Fix hangfire autofac dependency resolution exception ([#22](https://www.github.com/SaveApis/Streamer.Bot-Cloud/issues/22)) ([146c413](https://www.github.com/SaveApis/Streamer.Bot-Cloud/commit/146c413948b7df0ba125cbefa90af61cf7c26597))
+* Fix hangfire autofac dependency resolution exception ([#23](https://www.github.com/SaveApis/Streamer.Bot-Cloud/issues/23)) ([72f6985](https://www.github.com/SaveApis/Streamer.Bot-Cloud/commit/72f698503b12dbfacadefd7939038a60333b0951))
+
 <a name="1.1.0"></a>
 ## [1.1.0](https://www.github.com/SaveApis/Streamer.Bot-Cloud/releases/tag/v1.1.0) (2025-09-06)
 
