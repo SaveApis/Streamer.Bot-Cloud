@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Builder;
 using Utils.Core;
 using Utils.Core.Application.Helpers;
 using Utils.Correlation;
+using Utils.Hangfire;
 using Utils.Mediator;
 using Utils.Rest;
 using Utils.Swagger;
@@ -22,7 +23,7 @@ public static class WebApplicationBuilderExtensions
         var assemblyHelper = new AssemblyHelper([softwareAssembly, currentAssembly, .. utilAssemblies]);
 
         builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory())
-            .ConfigureContainer<ContainerBuilder>((_, containerBuilder) =>
+            .ConfigureContainer<ContainerBuilder>((context, containerBuilder) =>
                 {
                     containerBuilder.RegisterModule(new CoreModule(assemblyHelper));
 
@@ -32,6 +33,7 @@ public static class WebApplicationBuilderExtensions
 
                     containerBuilder.RegisterModule(new MediatorModule(assemblyHelper));
                     containerBuilder.RegisterModule(new ValidationModule(assemblyHelper));
+                    containerBuilder.RegisterModule(new HangfireModule(assemblyHelper, context.Configuration));
                 }
             );
     }
@@ -46,5 +48,6 @@ public static class WebApplicationBuilderExtensions
 
         yield return typeof(MediatorModule).Assembly;
         yield return typeof(ValidationModule).Assembly;
+        yield return typeof(HangfireModule).Assembly;
     }
 }

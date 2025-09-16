@@ -39,5 +39,29 @@ spec:
                   name: core
                   key: environment
                   optional: false
+            - name: Hangfire__Redis__Host
+              valueFrom:
+                secretKeyRef:
+                  name: valkey
+                  key: host
+                  optional: false
+            - name: Hangfire__Redis__Port
+              valueFrom:
+                secretKeyRef:
+                  name: valkey
+                  key: port
+                  optional: false
+            - name: Hangfire__Redis__UserName
+              valueFrom:
+                secretKeyRef:
+                  name: valkey
+                  key: username
+                  optional: false
+            - name: Hangfire__Redis__Password
+              valueFrom:
+                secretKeyRef:
+                  name: valkey
+                  key: password
+                  optional: false
       restartPolicy: Always
       

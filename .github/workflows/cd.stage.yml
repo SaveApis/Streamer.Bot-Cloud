@@ -8,7 +8,7 @@ on:
       - Kubernetes/**
       - .github/workflows/cd.stage.yml
 
-concurrency: 
+concurrency:
   group: cd-stage
   cancel-in-progress: true
 
@@ -36,6 +36,13 @@ jobs:
           context: .
           file: src/Software/Software.Middleware/Dockerfile
           tags: registry.digitalocean.com/saveapis/streamer-bot-cloud-middleware:${{ github.sha }}
+          secrets: |
+            hangfire_ace_url=${{ secrets.HANGFIRE_ACE_URL }}
+            hangfire_ace_user=${{ secrets.HANGFIRE_ACE_USER }}
+            hangfire_ace_password=${{ secrets.HANGFIRE_ACE_TOKEN }}
+            hangfire_pro_url=${{ secrets.HANGFIRE_PRO_URL }}
+            hangfire_pro_user=${{ secrets.HANGFIRE_PRO_USER }}
+            hangfire_pro_password=${{ secrets.HANGFIRE_PRO_TOKEN }}
   docker-event-twitch:
     name: Deploy Docker Event (Twitch)
     runs-on: ubuntu-22.04
@@ -59,6 +66,13 @@ jobs:
           context: .
           file: src/Software/Event/Software.Event.Twitch/Dockerfile
           tags: registry.digitalocean.com/saveapis/streamer-bot-cloud-event-twitch:${{ github.sha }}
+          secrets: |
+            hangfire_ace_url=${{ secrets.HANGFIRE_ACE_URL }}
+            hangfire_ace_user=${{ secrets.HANGFIRE_ACE_USER }}
+            hangfire_ace_password=${{ secrets.HANGFIRE_ACE_TOKEN }}
+            hangfire_pro_url=${{ secrets.HANGFIRE_PRO_URL }}
+            hangfire_pro_user=${{ secrets.HANGFIRE_PRO_USER }}
+            hangfire_pro_password=${{ secrets.HANGFIRE_PRO_TOKEN }}
   docker-event-discord:
     name: Deploy Docker Event (Discord)
     runs-on: ubuntu-22.04
@@ -82,6 +96,13 @@ jobs:
           context: .
           file: src/Software/Event/Software.Event.Discord/Dockerfile
           tags: registry.digitalocean.com/saveapis/streamer-bot-cloud-event-discord:${{ github.sha }}
+          secrets: |
+            hangfire_ace_url=${{ secrets.HANGFIRE_ACE_URL }}
+            hangfire_ace_user=${{ secrets.HANGFIRE_ACE_USER }}
+            hangfire_ace_password=${{ secrets.HANGFIRE_ACE_TOKEN }}
+            hangfire_pro_url=${{ secrets.HANGFIRE_PRO_URL }}
+            hangfire_pro_user=${{ secrets.HANGFIRE_PRO_USER }}
+            hangfire_pro_password=${{ secrets.HANGFIRE_PRO_TOKEN }}
   docker-event-youtube:
     name: Deploy Docker Event (YouTube)
     runs-on: ubuntu-22.04
@@ -105,6 +126,13 @@ jobs:
           context: .
           file: src/Software/Event/Software.Event.YouTube/Dockerfile
           tags: registry.digitalocean.com/saveapis/streamer-bot-cloud-event-youtube:${{ github.sha }}
+          secrets: |
+            hangfire_ace_url=${{ secrets.HANGFIRE_ACE_URL }}
+            hangfire_ace_user=${{ secrets.HANGFIRE_ACE_USER }}
+            hangfire_ace_password=${{ secrets.HANGFIRE_ACE_TOKEN }}
+            hangfire_pro_url=${{ secrets.HANGFIRE_PRO_URL }}
+            hangfire_pro_user=${{ secrets.HANGFIRE_PRO_USER }}
+            hangfire_pro_password=${{ secrets.HANGFIRE_PRO_TOKEN }}
   docker-bot-twitch:
     name: Deploy Docker Bot (Twitch)
     runs-on: ubuntu-22.04
@@ -128,6 +156,13 @@ jobs:
           context: .
           file: src/Software/Bot/Software.Bot.Twitch/Dockerfile
           tags: registry.digitalocean.com/saveapis/streamer-bot-cloud-bot-twitch:${{ github.sha }}
+          secrets: |
+            hangfire_ace_url=${{ secrets.HANGFIRE_ACE_URL }}
+            hangfire_ace_user=${{ secrets.HANGFIRE_ACE_USER }}
+            hangfire_ace_password=${{ secrets.HANGFIRE_ACE_TOKEN }}
+            hangfire_pro_url=${{ secrets.HANGFIRE_PRO_URL }}
+            hangfire_pro_user=${{ secrets.HANGFIRE_PRO_USER }}
+            hangfire_pro_password=${{ secrets.HANGFIRE_PRO_TOKEN }}
   docker-bot-discord:
     name: Deploy Docker Bot (Discord)
     runs-on: ubuntu-22.04
@@ -151,6 +186,13 @@ jobs:
           context: .
           file: src/Software/Bot/Software.Bot.Discord/Dockerfile
           tags: registry.digitalocean.com/saveapis/streamer-bot-cloud-bot-discord:${{ github.sha }}
+          secrets: |
+            hangfire_ace_url=${{ secrets.HANGFIRE_ACE_URL }}
+            hangfire_ace_user=${{ secrets.HANGFIRE_ACE_USER }}
+            hangfire_ace_password=${{ secrets.HANGFIRE_ACE_TOKEN }}
+            hangfire_pro_url=${{ secrets.HANGFIRE_PRO_URL }}
+            hangfire_pro_user=${{ secrets.HANGFIRE_PRO_USER }}
+            hangfire_pro_password=${{ secrets.HANGFIRE_PRO_TOKEN }}
   docker-bot-youtube:
     name: Deploy Docker Bot (YouTube)
     runs-on: ubuntu-22.04
@@ -174,6 +216,13 @@ jobs:
           context: .
           file: src/Software/Bot/Software.Bot.YouTube/Dockerfile
           tags: registry.digitalocean.com/saveapis/streamer-bot-cloud-bot-youtube:${{ github.sha }}
+          secrets: |
+            hangfire_ace_url=${{ secrets.HANGFIRE_ACE_URL }}
+            hangfire_ace_user=${{ secrets.HANGFIRE_ACE_USER }}
+            hangfire_ace_password=${{ secrets.HANGFIRE_ACE_TOKEN }}
+            hangfire_pro_url=${{ secrets.HANGFIRE_PRO_URL }}
+            hangfire_pro_user=${{ secrets.HANGFIRE_PRO_USER }}
+            hangfire_pro_password=${{ secrets.HANGFIRE_PRO_TOKEN }}
   kubernetes:
     needs:
       - docker-middleware
@@ -198,6 +247,10 @@ jobs:
         run: |
           find Kubernetes/ -type f -name '*.yaml' -exec sed -i.bak \
             -e 's|%ENVIRONMENT%|staging|g' \
+            -e 's|%VALKEY_HOST%|${{ secrets.VALKEY_HOST }}|g' \
+            -e 's|%VALKEY_PORT%|${{ secrets.VALKEY_PORT }}|g' \
+            -e 's|%VALKEY_USERNAME%|${{ secrets.VALKEY_USERNAME }}|g' \
+            -e 's|%VALKEY_PASSWORD%|${{ secrets.VALKEY_PASSWORD }}|g' \
             -e 's|%INGRESS_HOST%|staging.streamer-bot-cloud.saveapis.de|g' \
             -e 's|%VERSION%|${{ github.sha }}|g' {} +
       - name: Find changed files

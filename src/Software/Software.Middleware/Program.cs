@@ -1,6 +1,7 @@
 using System.Reflection;
 using Correlate.AspNetCore;
 using Software.Core.Infrastructure.Extensions;
+using Utils.Hangfire.Infrastructure.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,5 +18,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+await app.UseCompactHangfireDashboard().ConfigureAwait(false);
 
-app.Run();
+await app.StartAsync().ConfigureAwait(false);
+await app.WaitForShutdownAsync().ConfigureAwait(false);
