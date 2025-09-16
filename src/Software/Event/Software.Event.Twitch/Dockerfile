@@ -5,6 +5,14 @@ EXPOSE 8080
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
+COPY ["src/Libraries/Software.Core/Software.Core.csproj", "src/Libraries/Software.Core/"]
+COPY ["src/Libraries/Utils/Utils.Core/Utils.Core.csproj", "src/Libraries/Utils/Utils.Core/"]
+COPY ["src/Libraries/Utils/Utils.Correlation/Utils.Correlation.csproj", "src/Libraries/Utils/Utils.Correlation/"]
+COPY ["src/Libraries/Utils/Utils.Hangfire/Utils.Hangfire.csproj", "src/Libraries/Utils/Utils.Hangfire/"]
+COPY ["src/Libraries/Utils/Utils.Mediator/Utils.Mediator.csproj", "src/Libraries/Utils/Utils.Mediator/"]
+COPY ["src/Libraries/Utils/Utils.Rest/Utils.Rest.csproj", "src/Libraries/Utils/Utils.Rest/"]
+COPY ["src/Libraries/Utils/Utils.Swagger/Utils.Swagger.csproj", "src/Libraries/Utils/Utils.Swagger/"]
+COPY ["src/Libraries/Utils/Utils.Validation/Utils.Validation.csproj", "src/Libraries/Utils/Utils.Validation/"]
 COPY ["src/Software/Event/Software.Event.Twitch/Software.Event.Twitch.csproj", "src/Software/Event/Software.Event.Twitch/"]
 
 RUN --mount=type=secret,id=hangfire_ace_url \
