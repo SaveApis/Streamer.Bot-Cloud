@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [versionize](https://github.com/versionize/versionize) for commit guidelines.
 
+<a name="1.3.0"></a>
+## [1.3.0](https://www.github.com/SaveApis/Streamer.Bot-Cloud/releases/tag/v1.3.0) (2025-09-17)
+
+### ✨ Features
+
+* EntityFrameworkCore Module ([#24](https://www.github.com/SaveApis/Streamer.Bot-Cloud/issues/24)) ([fd2041a](https://www.github.com/SaveApis/Streamer.Bot-Cloud/commit/fd2041aeebc4f427c2172727b9b34baa96a981cb))
+
 <a name="1.2.0"></a>
 ## [1.2.0](https://www.github.com/SaveApis/Streamer.Bot-Cloud/releases/tag/v1.2.0) (2025-09-16)
 
