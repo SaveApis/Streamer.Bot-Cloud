@@ -1,4 +1,3 @@
-using System.Text.Json;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Hangfire;
@@ -7,7 +6,6 @@ using Hangfire.Pro.Redis;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Converters;
 using Utils.Core.Infrastructure.Helpers;
@@ -23,8 +21,6 @@ public class HangfireModule(IAssemblyHelper assemblyHelper, IConfiguration confi
 {
     protected override void Load(ContainerBuilder builder)
     {
-        builder.RegisterInstance(GlobalConfiguration.Configuration).As<IGlobalConfiguration>().SingleInstance();
-
         RegisterOptions(builder, configuration);
         RegisterJobs(builder, assemblyHelper);
         RegisterRecurringEvents(builder, assemblyHelper);
@@ -66,14 +62,8 @@ public class HangfireModule(IAssemblyHelper assemblyHelper, IConfiguration confi
 
         collection.AddHangfire((provider, globalConfiguration) =>
         {
-            var logger = provider.GetRequiredService<ILogger<HangfireModule>>();
-
-            logger.LogInformation("Configuring Hangfire...");
             var monitor = provider.GetRequiredService<IOptionsMonitor<HangfireOption>>();
             var option = monitor.CurrentValue;
-            var serializedOption = JsonSerializer.Serialize(option);
-            logger.LogInformation("Hangfire configuration: {option}", serializedOption);
-
             var redisOptions = new RedisStorageOptions
             {
                 Database = option.Redis.Database,
@@ -85,28 +75,14 @@ public class HangfireModule(IAssemblyHelper assemblyHelper, IConfiguration confi
                 MaxSucceededListLength = option.Redis.MaxSucceededListLength,
             };
 
-            logger.LogInformation("Set data compatibility level");
             globalConfiguration.SetDataCompatibilityLevel(CompatibilityLevel.Version_180);
-
-            logger.LogInformation("Use simple assembly name type serializer");
             globalConfiguration.UseSimpleAssemblyNameTypeSerializer();
-
-            logger.LogInformation("Use recommended serializer settings");
             globalConfiguration.UseRecommendedSerializerSettings(settings => settings.Converters.Add(new StringEnumConverter()));
-
-            logger.LogInformation("Use redis metrics");
             globalConfiguration.UseRedisMetrics();
-
-            logger.LogInformation("Use redis storage: {configuration}, {options}", option.Redis, JsonSerializer.Serialize(redisOptions));
             globalConfiguration.UseRedisStorage(option.Redis.ToString(), redisOptions);
 
-            logger.LogInformation("Use correlate");
             globalConfiguration.UseCorrelate(provider);
-
-            logger.LogInformation("Use batches");
             globalConfiguration.UseBatches();
-
-            logger.LogInformation("Use throttling");
             globalConfiguration.UseThrottling();
         });
         collection.AddHangfireServer((provider, options) =>
