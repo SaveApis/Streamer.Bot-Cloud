@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Builder;
 using Utils.Core;
 using Utils.Core.Application.Helpers;
 using Utils.Correlation;
+using Utils.EntityFrameworkCore;
 using Utils.Hangfire;
 using Utils.Mediator;
 using Utils.Rest;
@@ -34,6 +35,7 @@ public static class WebApplicationBuilderExtensions
                     containerBuilder.RegisterModule(new MediatorModule(assemblyHelper));
                     containerBuilder.RegisterModule(new ValidationModule(assemblyHelper));
                     containerBuilder.RegisterModule(new HangfireModule(assemblyHelper, context.Configuration));
+                    containerBuilder.RegisterModule(new EntityFrameworkCoreModule(assemblyHelper, context.Configuration));
                 }
             );
     }
@@ -49,5 +51,6 @@ public static class WebApplicationBuilderExtensions
         yield return typeof(MediatorModule).Assembly;
         yield return typeof(ValidationModule).Assembly;
         yield return typeof(HangfireModule).Assembly;
+        yield return typeof(EntityFrameworkCoreModule).Assembly;
     }
 }
