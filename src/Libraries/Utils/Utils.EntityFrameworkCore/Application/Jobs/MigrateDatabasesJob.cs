@@ -22,7 +22,7 @@ public class MigrateDatabasesJob(ILogger<IHangfireJob<ApplicationStartedEvent>> 
             Logger.LogInformation("No DbContext found to migrate.");
             return;
         }
-        
+
         foreach (var dbContext in dbContextList)
         {
             var dbContextName = dbContext.GetType().Name;
@@ -31,7 +31,7 @@ public class MigrateDatabasesJob(ILogger<IHangfireJob<ApplicationStartedEvent>> 
                 Logger.LogDebug("Skipping migration for DbContext {DbContextName} because it does not implement IWriteDbContext.", dbContextName);
                 continue;
             }
-            
+
             await dbContext.Database.MigrateAsync(cancellationToken).ConfigureAwait(false);
             Logger.LogInformation("Migrated database for DbContext {DbContextName}.", dbContextName);
 

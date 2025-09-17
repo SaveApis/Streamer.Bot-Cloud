@@ -26,7 +26,7 @@ public class MySqlOption
             AllowUserVariables = true,
             BrowsableConnectionString = false,
         };
-        
+
         return builder.ToString();
     }
 }

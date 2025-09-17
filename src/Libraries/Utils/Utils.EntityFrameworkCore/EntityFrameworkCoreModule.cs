@@ -18,7 +18,7 @@ public class EntityFrameworkCoreModule(IAssemblyHelper assemblyHelper, IConfigur
             .As<DbContext>();
         RegisterOptions(builder, configuration);
     }
-    
+
     private static void RegisterOptions(ContainerBuilder builder, IConfiguration configuration)
     {
         var collection = new ServiceCollection();
