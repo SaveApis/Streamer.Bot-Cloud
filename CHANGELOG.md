@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [versionize](https://github.com/versionize/versionize) for commit guidelines.
 
+<a name="1.4.0"></a>
+## [1.4.0](https://www.github.com/SaveApis/Streamer.Bot-Cloud/releases/tag/v1.4.0) (2025-09-18)
+
+### ✨ Features
+
+* Encryption module ([#26](https://www.github.com/SaveApis/Streamer.Bot-Cloud/issues/26)) ([07d2175](https://www.github.com/SaveApis/Streamer.Bot-Cloud/commit/07d21755dbf52527a02bb67ab70725a2ed417514))
+
+### ♻️ Code Refactoring
+
+* Only run MigrateDatabasesJob.cs if any dbcontext is available ([#25](https://www.github.com/SaveApis/Streamer.Bot-Cloud/issues/25)) ([628231c](https://www.github.com/SaveApis/Streamer.Bot-Cloud/commit/628231caf31daacd55391538004198a0d9c25275))
+
 <a name="1.3.0"></a>
 ## [1.3.0](https://www.github.com/SaveApis/Streamer.Bot-Cloud/releases/tag/v1.3.0) (2025-09-17)
 
