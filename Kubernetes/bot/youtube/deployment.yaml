@@ -69,5 +69,11 @@ spec:
               value: "%ENVIRONMENT%:hangfire:bot:youtube:"
             - name: Hangfire__Dashboard__PrefixPath
               value: "/api/bot/youtube"
+            - name: Encryption__Key
+              valueFrom:
+                secretKeyRef:
+                  name: encryption
+                  key: bot-youtube
+                  optional: false
       restartPolicy: Always
       

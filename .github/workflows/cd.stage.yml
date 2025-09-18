@@ -251,6 +251,13 @@ jobs:
             -e 's|%VALKEY_PORT%|${{ secrets.VALKEY_PORT }}|g' \
             -e 's|%VALKEY_USERNAME%|${{ secrets.VALKEY_USERNAME }}|g' \
             -e 's|%VALKEY_PASSWORD%|${{ secrets.VALKEY_PASSWORD }}|g' \
+            -e 's|%ENCRYPTION_MIDDLEWARE_KEY%|${{ secrets.STAGE_ENCRYPTION_MIDDLEWARE_KEY }}|g' \
+            -e 's|%ENCRYPTION_EVENT_TWITCH_KEY%|${{ secrets.STAGE_ENCRYPTION_EVENT_TWITCH_KEY }}|g' \
+            -e 's|%ENCRYPTION_EVENT_DISCORD_KEY%|${{ secrets.STAGE_ENCRYPTION_EVENT_DISCORD_KEY }}|g' \
+            -e 's|%ENCRYPTION_EVENT_YOUTUBE_KEY%|${{ secrets.STAGE_ENCRYPTION_EVENT_YOUTUBE_KEY }}|g' \
+            -e 's|%ENCRYPTION_BOT_TWITCH_KEY%|${{ secrets.STAGE_ENCRYPTION_BOT_TWITCH_KEY }}|g' \
+            -e 's|%ENCRYPTION_BOT_DISCORD_KEY%|${{ secrets.STAGE_ENCRYPTION_BOT_DISCORD_KEY }}|g' \
+            -e 's|%ENCRYPTION_BOT_YOUTUBE_KEY%|${{ secrets.STAGE_ENCRYPTION_BOT_YOUTUBE_KEY }}|g' \
             -e 's|%INGRESS_HOST%|staging.streamer-bot-cloud.saveapis.de|g' \
             -e 's|%VERSION%|${{ github.sha }}|g' {} +
       - name: Find changed files

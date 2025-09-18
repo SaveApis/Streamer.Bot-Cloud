@@ -29,3 +29,12 @@ secretGenerator:
       - port=%VALKEY_PORT%
       - username=%VALKEY_USERNAME%
       - password=%VALKEY_PASSWORD%
+  - name: encryption
+    literals:
+      - middleware=%ENCRYPTION_MIDDLEWARE_KEY%
+      - event-twitch=%ENCRYPTION_EVENT_TWITCH_KEY%
+      - event-discord=%ENCRYPTION_EVENT_DISCORD_KEY%
+      - event-youtube=%ENCRYPTION_EVENT_YOUTUBE_KEY%
+      - bot-twitch=%ENCRYPTION_BOT_TWITCH_KEY%
+      - bot-discord=%ENCRYPTION_BOT_DISCORD_KEY%
+      - bot-youtube=%ENCRYPTION_BOT_YOUTUBE_KEY%

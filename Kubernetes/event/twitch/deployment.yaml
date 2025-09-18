@@ -69,5 +69,11 @@ spec:
               value: "%ENVIRONMENT%:hangfire:event:twitch:"
             - name: Hangfire__Dashboard__PrefixPath
               value: "/api/event/twitch"
+            - name: Encryption__Key
+              valueFrom:
+                secretKeyRef:
+                  name: encryption
+                  key: event-twitch
+                  optional: false
       restartPolicy: Always
       
