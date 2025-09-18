@@ -13,7 +13,8 @@ public class EncryptionService(IOptionsMonitor<EncryptionOption> monitor) : IEnc
         byte[] ivBytes;
         byte[] encryptedBytes;
 
-        using (var aes = Aes.Create()) {
+        using (var aes = Aes.Create())
+        {
             aes.Key = Convert.FromBase64String(Option.Key);
             if (string.IsNullOrEmpty(existingIv))
             {
@@ -39,7 +40,7 @@ public class EncryptionService(IOptionsMonitor<EncryptionOption> monitor) : IEnc
                 }
             }
         }
-        
+
         iv = Convert.ToBase64String(ivBytes);
         return Convert.ToBase64String(encryptedBytes);
     }

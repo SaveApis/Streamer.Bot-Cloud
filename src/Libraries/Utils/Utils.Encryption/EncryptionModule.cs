@@ -13,7 +13,7 @@ public class EncryptionModule(IConfiguration configuration) : Module
     protected override void Load(ContainerBuilder builder)
     {
         RegisterOptions(builder, configuration);
-        
+
         builder.RegisterType<EncryptionService>()
             .As<IEncryptionService>()
             .InstancePerLifetimeScope();

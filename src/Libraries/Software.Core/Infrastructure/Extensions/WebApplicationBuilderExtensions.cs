@@ -43,7 +43,7 @@ public static class WebApplicationBuilderExtensions
                         containerBuilder.RegisterModule(new ValidationModule(assemblyHelper));
                         containerBuilder.RegisterModule(new HangfireModule(assemblyHelper, context.Configuration));
                         containerBuilder.RegisterModule(new EntityFrameworkCoreModule(assemblyHelper, context.Configuration));
-                        containerBuilder.RegisterModule(new EncryptionModule(context.Configuration));   
+                        containerBuilder.RegisterModule(new EncryptionModule(context.Configuration));
                     }
                 }
             );
