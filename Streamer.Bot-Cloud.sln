@@ -59,6 +59,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utils.Hangfire", "src\Libra
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utils.EntityFrameworkCore", "src\Libraries\Utils\Utils.EntityFrameworkCore\Utils.EntityFrameworkCore.csproj", "{302C0EC8-7EC6-4DF8-8C31-34C4784CBBE0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utils.Encryption", "src\Libraries\Utils\Utils.Encryption\Utils.Encryption.csproj", "{143BBFB4-61CF-42A5-828B-E5AAC33B656F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -309,6 +311,18 @@ Global
 		{302C0EC8-7EC6-4DF8-8C31-34C4784CBBE0}.Release|x64.Build.0 = Release|Any CPU
 		{302C0EC8-7EC6-4DF8-8C31-34C4784CBBE0}.Release|x86.ActiveCfg = Release|Any CPU
 		{302C0EC8-7EC6-4DF8-8C31-34C4784CBBE0}.Release|x86.Build.0 = Release|Any CPU
+		{143BBFB4-61CF-42A5-828B-E5AAC33B656F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{143BBFB4-61CF-42A5-828B-E5AAC33B656F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{143BBFB4-61CF-42A5-828B-E5AAC33B656F}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{143BBFB4-61CF-42A5-828B-E5AAC33B656F}.Debug|x64.Build.0 = Debug|Any CPU
+		{143BBFB4-61CF-42A5-828B-E5AAC33B656F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{143BBFB4-61CF-42A5-828B-E5AAC33B656F}.Debug|x86.Build.0 = Debug|Any CPU
+		{143BBFB4-61CF-42A5-828B-E5AAC33B656F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{143BBFB4-61CF-42A5-828B-E5AAC33B656F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{143BBFB4-61CF-42A5-828B-E5AAC33B656F}.Release|x64.ActiveCfg = Release|Any CPU
+		{143BBFB4-61CF-42A5-828B-E5AAC33B656F}.Release|x64.Build.0 = Release|Any CPU
+		{143BBFB4-61CF-42A5-828B-E5AAC33B656F}.Release|x86.ActiveCfg = Release|Any CPU
+		{143BBFB4-61CF-42A5-828B-E5AAC33B656F}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -340,5 +354,6 @@ Global
 		{56FABEFD-E9FB-4814-B5B4-FAE1065E95B0} = {969279D8-5F47-E7B5-2176-08E438573501}
 		{DE27B858-86E5-41F2-B97F-6B0EF9C21034} = {969279D8-5F47-E7B5-2176-08E438573501}
 		{302C0EC8-7EC6-4DF8-8C31-34C4784CBBE0} = {969279D8-5F47-E7B5-2176-08E438573501}
+		{143BBFB4-61CF-42A5-828B-E5AAC33B656F} = {969279D8-5F47-E7B5-2176-08E438573501}
 	EndGlobalSection
 EndGlobal
