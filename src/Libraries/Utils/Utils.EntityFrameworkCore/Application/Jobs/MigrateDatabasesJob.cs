@@ -13,6 +13,11 @@ namespace Utils.EntityFrameworkCore.Application.Jobs;
 [HangfireQueue(HangfireQueue.System)]
 public class MigrateDatabasesJob(ILogger<IHangfireJob<ApplicationStartedEvent>> logger, IMediator mediator, IEnumerable<DbContext> dbContexts) : BaseHangfireJob<ApplicationStartedEvent>(logger)
 {
+    protected override bool CheckSupport(ApplicationStartedEvent @event)
+    {
+        return dbContexts.OfType<IWriteDbContext>().Any();
+    }
+
     [HangfireJobName("Migrate databases")]
     public override async Task RunAsync(ApplicationStartedEvent @event, CancellationToken cancellationToken = default)
     {
