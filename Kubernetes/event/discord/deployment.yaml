@@ -69,5 +69,11 @@ spec:
               value: "%ENVIRONMENT%:hangfire:event:discord:"
             - name: Hangfire__Dashboard__PrefixPath
               value: "/api/event/discord"
+            - name: Encryption__Key
+              valueFrom:
+                secretKeyRef:
+                  name: encryption
+                  key: event-discord
+                  optional: false
       restartPolicy: Always
       

@@ -65,5 +65,11 @@ spec:
               value: "%ENVIRONMENT%:hangfire:middleware:"
             - name: Hangfire__Dashboard__PrefixPath
               value: "/api/middleware"
+            - name: Encryption__Key
+              valueFrom:
+                secretKeyRef:
+                  name: encryption
+                  key: middleware
+                  optional: false
       restartPolicy: Always
       
