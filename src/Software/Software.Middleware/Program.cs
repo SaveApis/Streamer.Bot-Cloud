@@ -5,7 +5,12 @@ using Utils.Hangfire.Infrastructure.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.ConfigureSaveApis(Assembly.GetExecutingAssembly());
+builder.Services.AddAuthorization();
+builder.Services.AddAuthentication()
+    .AddScheme<ApplicationBasicAuthHandlerOption, ApplicationBasicAuthHandler>(ApplicationBasicAuthHandler.SchemeName, null);
+
+builder.ConfigureSaveApis(Assembly.GetExecutingAssembly(), (context, containerBuilder, assemblyHelper) => containerBuilder.RegisterModule(new ApplicationModule(context.Configuration)));
+builder.Services.RegisterEntityFrameworkCore<CoreReadDbContext, CoreWriteDbContext>();
 
 var app = builder.Build();
 
