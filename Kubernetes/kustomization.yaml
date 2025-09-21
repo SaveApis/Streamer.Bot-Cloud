@@ -29,6 +29,13 @@ secretGenerator:
       - port=%VALKEY_PORT%
       - username=%VALKEY_USERNAME%
       - password=%VALKEY_PASSWORD%
+  - name: mysql
+    literals:
+      - host=%MYSQL_HOST%
+      - port=%MYSQL_PORT%
+      - username=%MYSQL_USERNAME%
+      - password=%MYSQL_PASSWORD%
+      - middleware-database=%MYSQL_MIDDLEWARE_DATABASE%
   - name: encryption
     literals:
       - middleware=%ENCRYPTION_MIDDLEWARE_KEY%
@@ -38,3 +45,21 @@ secretGenerator:
       - bot-twitch=%ENCRYPTION_BOT_TWITCH_KEY%
       - bot-discord=%ENCRYPTION_BOT_DISCORD_KEY%
       - bot-youtube=%ENCRYPTION_BOT_YOUTUBE_KEY%
+  - name: applications
+    literals:
+      - frontend-auth-id=%APPLICATIONS_FRONTEND_AUTH_ID%
+      - frontend-auth-secret=%APPLICATIONS_FRONTEND_AUTH_SECRET%
+      - middleware-auth-id=%APPLICATIONS_MIDDLEWARE_AUTH_ID%
+      - middleware-auth-secret=%APPLICATIONS_MIDDLEWARE_AUTH_SECRET%
+      - event-twitch-auth-id=%APPLICATIONS_EVENT_TWITCH_AUTH_ID%
+      - event-twitch-auth-secret=%APPLICATIONS_EVENT_TWITCH_AUTH_SECRET%
+      - event-discord-auth-id=%APPLICATIONS_EVENT_DISCORD_AUTH_ID%
+      - event-discord-auth-secret=%APPLICATIONS_EVENT_DISCORD_AUTH_SECRET%
+      - event-youtube-auth-id=%APPLICATIONS_EVENT_YOUTUBE_AUTH_ID%
+      - event-youtube-auth-secret=%APPLICATIONS_EVENT_YOUTUBE_AUTH_SECRET%
+      - bot-twitch-auth-id=%APPLICATIONS_BOT_TWITCH_AUTH_ID%
+      - bot-twitch-auth-secret=%APPLICATIONS_BOT_TWITCH_AUTH_SECRET%
+      - bot-discord-auth-id=%APPLICATIONS_BOT_DISCORD_AUTH_ID%
+      - bot-discord-auth-secret=%APPLICATIONS_BOT_DISCORD_AUTH_SECRET%
+      - bot-youtube-auth-id=%APPLICATIONS_BOT_YOUTUBE_AUTH_ID%
+      - bot-youtube-auth-secret=%APPLICATIONS_BOT_YOUTUBE_AUTH_SECRET%

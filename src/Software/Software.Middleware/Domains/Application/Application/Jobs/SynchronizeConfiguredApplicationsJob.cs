@@ -106,13 +106,13 @@ public class SynchronizeConfiguredApplicationsJob(
         foreach (var entity in entitiesToUpdate)
         {
             var option = optionsToUpdate.First(x => string.Equals(x.Key, entity.Key, StringComparison.InvariantCultureIgnoreCase));
-            var scopes = option.Scopes
-                .Select(s => applicationScopes.Single(db => string.Equals(db.Key, s, StringComparison.InvariantCultureIgnoreCase)))
+            var selectedScopes = applicationScopes
+                .Where(s => option.Scopes.Contains(s.Key, StringComparer.InvariantCultureIgnoreCase))
                 .ToList();
 
-            if (entity.HasChanges(option.Name, option.AuthId, option.AuthSecret, scopes, encryptionService))
+            if (entity.HasChanges(option.Name, option.AuthId, option.AuthSecret, selectedScopes, encryptionService))
             {
-                entity.UpdateFull(option.Name, option.AuthId, option.AuthSecret, scopes, encryptionService);
+                entity.UpdateFull(option.Name, option.AuthId, option.AuthSecret, selectedScopes, encryptionService);
                 context.Applications.Update(entity);
             }
         }

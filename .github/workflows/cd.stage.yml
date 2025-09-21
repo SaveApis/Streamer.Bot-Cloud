@@ -247,10 +247,37 @@ jobs:
         run: |
           find Kubernetes/ -type f -name '*.yaml' -exec sed -i.bak \
             -e 's|%ENVIRONMENT%|staging|g' \
+
+            -e 's|%INGRESS_HOST%|staging.streamer-bot-cloud.saveapis.de|g' \
+
             -e 's|%VALKEY_HOST%|${{ secrets.VALKEY_HOST }}|g' \
             -e 's|%VALKEY_PORT%|${{ secrets.VALKEY_PORT }}|g' \
             -e 's|%VALKEY_USERNAME%|${{ secrets.VALKEY_USERNAME }}|g' \
             -e 's|%VALKEY_PASSWORD%|${{ secrets.VALKEY_PASSWORD }}|g' \
+
+            -e 's|%MYSQL_HOST%|${{ secrets.MYSQL_HOST }}|g' \
+            -e 's|%MYSQL_PORT%|${{ secrets.MYSQL_PORT }}|g' \
+            -e 's|%MYSQL_USERNAME%|${{ secrets.MYSQL_USERNAME }}|g' \
+            -e 's|%MYSQL_PASSWORD%|${{ secrets.MYSQL_PASSWORD }}|g' \
+            -e 's|%MYSQL_MIDDLEWARE_DATABASE%|staging-streamer-bot-cloud-middleware|g' \
+
+            -e 's|%APPLICATIONS_FRONTEND_AUTH_ID%|${{ secrets.STAGE_APPLICATIONS_FRONTEND_AUTH_ID }}|g' \
+            -e 's|%APPLICATIONS_FRONTEND_AUTH_SECRET%|${{ secrets.STAGE_APPLICATIONS_FRONTEND_AUTH_SECRET }}|g' \
+            -e 's|%APPLICATIONS_MIDDLEWARE_AUTH_ID%|${{ secrets.STAGE_APPLICATIONS_MIDDLEWARE_AUTH_ID }}|g' \
+            -e 's|%APPLICATIONS_MIDDLEWARE_AUTH_SECRET%|${{ secrets.STAGE_APPLICATIONS_MIDDLEWARE_AUTH_SECRET }}|g' \
+            -e 's|%APPLICATIONS_EVENT_TWITCH_AUTH_ID%|${{ secrets.STAGE_APPLICATIONS_EVENT_TWITCH_AUTH_ID }}|g' \
+            -e 's|%APPLICATIONS_EVENT_TWITCH_AUTH_SECRET%|${{ secrets.STAGE_APPLICATIONS_EVENT_TWITCH_AUTH_SECRET }}|g' \
+            -e 's|%APPLICATIONS_EVENT_DISCORD_AUTH_ID%|${{ secrets.STAGE_APPLICATIONS_EVENT_DISCORD_AUTH_ID }}|g' \
+            -e 's|%APPLICATIONS_EVENT_DISCORD_AUTH_SECRET%|${{ secrets.STAGE_APPLICATIONS_EVENT_DISCORD_AUTH_SECRET }}|g' \
+            -e 's|%APPLICATIONS_EVENT_YOUTUBE_AUTH_ID%|${{ secrets.STAGE_APPLICATIONS_EVENT_YOUTUBE_AUTH_ID }}|g' \
+            -e 's|%APPLICATIONS_EVENT_YOUTUBE_AUTH_SECRET%|${{ secrets.STAGE_APPLICATIONS_EVENT_YOUTUBE_AUTH_SECRET }}|g' \
+            -e 's|%APPLICATIONS_BOT_TWITCH_AUTH_ID%|${{ secrets.STAGE_APPLICATIONS_BOT_TWITCH_AUTH_ID }}|g' \
+            -e 's|%APPLICATIONS_BOT_TWITCH_AUTH_SECRET%|${{ secrets.STAGE_APPLICATIONS_BOT_TWITCH_AUTH_SECRET }}|g' \
+            -e 's|%APPLICATIONS_BOT_DISCORD_AUTH_ID%|${{ secrets.STAGE_APPLICATIONS_BOT_DISCORD_AUTH_ID }}|g' \
+            -e 's|%APPLICATIONS_BOT_DISCORD_AUTH_SECRET%|${{ secrets.STAGE_APPLICATIONS_BOT_DISCORD_AUTH_SECRET }}|g' \
+            -e 's|%APPLICATIONS_BOT_YOUTUBE_AUTH_ID%|${{ secrets.STAGE_APPLICATIONS_BOT_YOUTUBE_AUTH_ID }}|g' \
+            -e 's|%APPLICATIONS_BOT_YOUTUBE_AUTH_SECRET%|${{ secrets.STAGE_APPLICATIONS_BOT_YOUTUBE_AUTH_SECRET }}|g' \
+
             -e 's|%ENCRYPTION_MIDDLEWARE_KEY%|${{ secrets.STAGE_ENCRYPTION_MIDDLEWARE_KEY }}|g' \
             -e 's|%ENCRYPTION_EVENT_TWITCH_KEY%|${{ secrets.STAGE_ENCRYPTION_EVENT_TWITCH_KEY }}|g' \
             -e 's|%ENCRYPTION_EVENT_DISCORD_KEY%|${{ secrets.STAGE_ENCRYPTION_EVENT_DISCORD_KEY }}|g' \
@@ -258,7 +285,7 @@ jobs:
             -e 's|%ENCRYPTION_BOT_TWITCH_KEY%|${{ secrets.STAGE_ENCRYPTION_BOT_TWITCH_KEY }}|g' \
             -e 's|%ENCRYPTION_BOT_DISCORD_KEY%|${{ secrets.STAGE_ENCRYPTION_BOT_DISCORD_KEY }}|g' \
             -e 's|%ENCRYPTION_BOT_YOUTUBE_KEY%|${{ secrets.STAGE_ENCRYPTION_BOT_YOUTUBE_KEY }}|g' \
-            -e 's|%INGRESS_HOST%|staging.streamer-bot-cloud.saveapis.de|g' \
+
             -e 's|%VERSION%|${{ github.sha }}|g' {} +
       - name: Find changed files
         run: find Kubernetes/ -type f -name '*.yaml.bak'
