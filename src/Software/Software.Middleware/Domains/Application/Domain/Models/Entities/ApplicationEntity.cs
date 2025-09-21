@@ -27,14 +27,14 @@ public class ApplicationEntity
         UpdateAuthSecret(authSecret, encryptionService);
         UpdateScopes(scopes);
     }
-    
+
     public void UpdateName(string name)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(name, nameof(name));
 
         Name = name;
     }
-    
+
     public void UpdateAuthId(string authId)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(authId, nameof(authId));
@@ -68,7 +68,7 @@ public class ApplicationEntity
     }
 
     #endregion Entity
-    
+
     private ApplicationEntity(string key, string name, ApplicationSource source, string authId, string authSecret, string iv)
     {
         Key = key;

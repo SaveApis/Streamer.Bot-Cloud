@@ -10,7 +10,7 @@ public class ApplicationScopeEntityTypeConfiguration : IEntityTypeConfiguration<
     {
         builder.ToTable("ApplicationScopes");
         builder.HasKey(e => e.Key);
-        
+
         builder.Property(e => e.Key).IsRequired().HasMaxLength(100).ValueGeneratedNever();
         builder.Property(e => e.Name).IsRequired().HasMaxLength(200);
     }

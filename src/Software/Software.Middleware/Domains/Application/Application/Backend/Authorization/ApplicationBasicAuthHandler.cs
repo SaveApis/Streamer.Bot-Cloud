@@ -32,7 +32,7 @@ public class ApplicationBasicAuthHandler(
         {
             return AuthenticateResult.Fail("Invalid Authorization Parameter");
         }
-        
+
         var credentialBytes = Convert.FromBase64String(parameter);
         var credentials = Encoding.UTF8.GetString(credentialBytes).Split(':', 2);
         if (credentials.Length != 2)

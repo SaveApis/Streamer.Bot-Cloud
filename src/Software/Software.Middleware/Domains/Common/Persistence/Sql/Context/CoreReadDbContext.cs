@@ -8,7 +8,7 @@ namespace Software.Middleware.Domains.Common.Persistence.Sql.Context;
 public class CoreReadDbContext(DbContextOptions<CoreReadDbContext> options) : BaseReadDbContext<CoreReadDbContext>(options)
 {
     protected override string Schema => "Core";
-    
+
     public IQueryable<ApplicationEntity> Applications => Set<ApplicationEntity>().AsNoTracking();
     public IQueryable<ApplicationScopeEntity> ApplicationScopes => Set<ApplicationScopeEntity>().AsNoTracking();
 
