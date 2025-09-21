@@ -1,0 +1,2 @@
+GET {{baseUrl}}/applications/scopes?key=application:read
+Authorization: ApplicationBasic {{frontendBasicAuth}}

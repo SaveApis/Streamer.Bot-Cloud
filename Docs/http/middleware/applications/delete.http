@@ -1,0 +1,2 @@
+DELETE {{baseUrl}}/applications/delete?key=test
+Authorization: ApplicationBasic {{frontendBasicAuth}}

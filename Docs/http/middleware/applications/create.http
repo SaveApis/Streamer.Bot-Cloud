@@ -1,0 +1,13 @@
+POST {{baseUrl}}/applications/create
+Authorization: ApplicationBasic {{frontendBasicAuth}}
+Content-Type: application/json
+
+{
+  "Key": "test",
+  "Name": "Test Application",
+  "AuthId": "test",
+  "AuthSecret": "dGVzdA==",
+  "Scopes": [
+    "application:read"
+  ]
+}

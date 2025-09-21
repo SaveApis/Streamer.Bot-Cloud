@@ -1,3 +1,4 @@
+using Hangfire.Throttling;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -11,6 +12,7 @@ using Utils.Hangfire.Infrastructure.Jobs;
 namespace Utils.EntityFrameworkCore.Application.Jobs;
 
 [HangfireQueue(HangfireQueue.System)]
+[Mutex("mysql:database:migrate")]
 public class MigrateDatabasesJob(ILogger<IHangfireJob<ApplicationStartedEvent>> logger, IMediator mediator, IEnumerable<DbContext> dbContexts) : BaseHangfireJob<ApplicationStartedEvent>(logger)
 {
     protected override bool CheckSupport(ApplicationStartedEvent @event)

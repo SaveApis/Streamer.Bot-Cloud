@@ -65,11 +65,172 @@ spec:
               value: "%ENVIRONMENT%:hangfire:middleware:"
             - name: Hangfire__Dashboard__PrefixPath
               value: "/api/middleware"
+            - name: MySql__Host
+              valueFrom:
+                secretKeyRef:
+                  name: mysql
+                  key: host
+                  optional: false
+            - name: MySql__Port
+              valueFrom:
+                secretKeyRef:
+                  name: mysql
+                  key: port
+                  optional: false
+            - name: MySql__UserName
+              valueFrom:
+                secretKeyRef:
+                  name: mysql
+                  key: username
+                  optional: false
+            - name: MySql__Password
+              valueFrom:
+                secretKeyRef:
+                  name: mysql
+                  key: password
+                  optional: false
+            - name: MySql__Database
+              valueFrom:
+                secretKeyRef:
+                  name: mysql
+                  key: middleware-database
+                  optional: false
             - name: Encryption__Key
               valueFrom:
                 secretKeyRef:
                   name: encryption
                   key: middleware
+                  optional: false
+
+            - name: Applications__0__Key
+              value: "frontend"
+            - name: Applications__0__Name
+              value: "Frontend"
+            - name: Applications__0__AuthId
+              valueFrom:
+                secretKeyRef:
+                  name: applications
+                  key: frontend-auth-id
+                  optional: false
+            - name: Applications__0__AuthSecret
+              valueFrom:
+                secretKeyRef:
+                  name: applications
+                  key: frontend-auth-secret
+                  optional: false
+            - name: Applications__0__Scopes
+              value: '["application:read","application:create","application:update","application:delete"]'
+            - name: Applications__1__Key
+              value: "middleware"
+            - name: Applications__1__Name
+              value: "Middleware"
+            - name: Applications__1__AuthId
+              valueFrom:
+                secretKeyRef:
+                  name: applications
+                  key: middleware-auth-id
+                  optional: false
+            - name: Applications__1__AuthSecret
+              valueFrom:
+                secretKeyRef:
+                  name: applications
+                  key: middleware-auth-secret
+                  optional: false
+            - name: Applications__2__Key
+              value: "event-twitch"
+            - name: Applications__2__Name
+              value: "Event Twitch"
+            - name: Applications__2__AuthId
+              valueFrom:
+                secretKeyRef:
+                  name: applications
+                  key: event-twitch-auth-id
+                  optional: false
+            - name: Applications__2__AuthSecret
+              valueFrom:
+                secretKeyRef:
+                  name: applications
+                  key: event-twitch-auth-secret
+                  optional: false
+            - name: Applications__3__Key
+              value: "event-discord"
+            - name: Applications__3__Name
+              value: "Event Discord"
+            - name: Applications__3__AuthId
+              valueFrom:
+                secretKeyRef:
+                  name: applications
+                  key: event-discord-auth-id
+                  optional: false
+            - name: Applications__3__AuthSecret
+              valueFrom:
+                secretKeyRef:
+                  name: applications
+                  key: event-discord-auth-secret
+                  optional: false
+            - name: Applications__4__Key
+              value: "event-youtube"
+            - name: Applications__4__Name
+              value: "Event YouTube"
+            - name: Applications__4__AuthId
+              valueFrom:
+                secretKeyRef:
+                  name: applications
+                  key: event-youtube-auth-id
+                  optional: false
+            - name: Applications__4__AuthSecret
+              valueFrom:
+                secretKeyRef:
+                  name: applications
+                  key: event-youtube-auth-secret
+                  optional: false
+            - name: Applications__5__Key
+              value: "bot-twitch"
+            - name: Applications__5__Name
+              value: "Bot Twitch"
+            - name: Applications__5__AuthId
+              valueFrom:
+                secretKeyRef:
+                  name: applications
+                  key: bot-twitch-auth-id
+                  optional: false
+            - name: Applications__5__AuthSecret
+              valueFrom:
+                secretKeyRef:
+                  name: applications
+                  key: bot-twitch-auth-secret
+                  optional: false
+            - name: Applications__6__Key
+              value: "bot-discord"
+            - name: Applications__6__Name
+              value: "Bot Discord"
+            - name: Applications__6__AuthId
+              valueFrom:
+                secretKeyRef:
+                  name: applications
+                  key: bot-discord-auth-id
+                  optional: false
+            - name: Applications__6__AuthSecret
+              valueFrom:
+                secretKeyRef:
+                  name: applications
+                  key: bot-discord-auth-secret
+                  optional: false
+            - name: Applications__7__Key
+              value: "bot-youtube"
+            - name: Applications__7__Name
+              value: "Bot YouTube"
+            - name: Applications__7__AuthId
+              valueFrom:
+                secretKeyRef:
+                  name: applications
+                  key: bot-youtube-auth-id
+                  optional: false
+            - name: Applications__7__AuthSecret
+              valueFrom:
+                secretKeyRef:
+                  name: applications
+                  key: bot-youtube-auth-secret
                   optional: false
       restartPolicy: Always
       

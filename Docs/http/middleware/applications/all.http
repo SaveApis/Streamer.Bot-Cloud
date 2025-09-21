@@ -1,0 +1,2 @@
+GET {{baseUrl}}/applications/all
+Authorization: ApplicationBasic {{frontendBasicAuth}}
