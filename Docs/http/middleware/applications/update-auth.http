@@ -1,0 +1,8 @@
+PATCH {{baseUrl}}/applications/update/auth?key=test
+Authorization: ApplicationBasic {{frontendBasicAuth}}
+Content-Type: application/json
+
+{
+  "AuthId": "test-test",
+  "AuthSecret": "dGVzdC10ZXN0"
+}

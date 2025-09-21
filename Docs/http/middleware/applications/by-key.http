@@ -1,0 +1,2 @@
+GET {{baseUrl}}/applications?key=middleware
+Authorization: ApplicationBasic {{frontendBasicAuth}}

@@ -1,0 +1,10 @@
+PATCH {{baseUrl}}/applications/update/scopes?key=test
+Authorization: ApplicationBasic {{frontendBasicAuth}}
+Content-Type: application/json
+
+{
+  "Scopes": [
+    "application:read",
+    "application:delete"
+  ]
+}
