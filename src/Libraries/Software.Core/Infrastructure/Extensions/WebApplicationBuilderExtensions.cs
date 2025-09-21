@@ -3,8 +3,10 @@ using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 using Utils.Core;
 using Utils.Core.Application.Helpers;
+using Utils.Core.Infrastructure.Helpers;
 using Utils.Correlation;
 using Utils.Encryption;
 using Utils.EntityFrameworkCore;
@@ -18,7 +20,7 @@ namespace Software.Core.Infrastructure.Extensions;
 
 public static class WebApplicationBuilderExtensions
 {
-    public static void ConfigureSaveApis(this WebApplicationBuilder builder, Assembly softwareAssembly)
+    public static void ConfigureSaveApis(this WebApplicationBuilder builder, Assembly softwareAssembly, Action<HostBuilderContext, ContainerBuilder, IAssemblyHelper>? registerSoftwareModulesAction = null)
     {
         var currentAssembly = Assembly.GetExecutingAssembly();
         var utilAssemblies = ReadUtilAssemblies();
@@ -44,6 +46,8 @@ public static class WebApplicationBuilderExtensions
                         containerBuilder.RegisterModule(new HangfireModule(assemblyHelper, context.Configuration));
                         containerBuilder.RegisterModule(new EntityFrameworkCoreModule(assemblyHelper, context.Configuration));
                         containerBuilder.RegisterModule(new EncryptionModule(context.Configuration));
+
+                        registerSoftwareModulesAction?.Invoke(context, containerBuilder, assemblyHelper);
                     }
                 }
             );
