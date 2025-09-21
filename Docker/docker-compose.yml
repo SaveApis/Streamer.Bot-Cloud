@@ -3,6 +3,8 @@
     depends_on:
       valkey:
         condition: service_healthy
+      mysql:
+        condition: service_healthy
     hostname: middleware
     container_name: middleware
     image: streamer-bot-cloud-middleware:dev
