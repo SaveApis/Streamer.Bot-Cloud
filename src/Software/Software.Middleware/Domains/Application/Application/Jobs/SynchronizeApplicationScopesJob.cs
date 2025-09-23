@@ -1,5 +1,7 @@
 using Hangfire.Throttling;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Software.Middleware.Domains.Application.Application.Events;
 using Software.Middleware.Domains.Application.Domain.Models.Entities;
 using Software.Middleware.Domains.Application.Infrastructure.Scopes;
 using Software.Middleware.Domains.Common.Persistence.Sql.Context;
@@ -15,11 +17,12 @@ namespace Software.Middleware.Domains.Application.Application.Jobs;
 public class SynchronizeApplicationScopesJob(
     ILogger<IHangfireJob<MigrationCompletedEvent>> logger,
     IDbContextFactory<CoreWriteDbContext> factory,
+    IMediator mediator,
     IEnumerable<IApplicationScope> scopes) : BaseHangfireJob<MigrationCompletedEvent>(logger)
 {
     protected override bool CheckSupport(MigrationCompletedEvent @event)
     {
-        return scopes.Any();
+        return @event.DbContextType == typeof(CoreWriteDbContext) && scopes.Any();
     }
 
     [HangfireJobName("Synchronize application scopes")]
@@ -48,6 +51,8 @@ public class SynchronizeApplicationScopesJob(
 
         var count = await context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
         Logger.LogInformation("Synchronized total of {Count} application scopes", count);
+
+        await mediator.Publish(new ApplicationScopesSynchronizedEvent(), cancellationToken).ConfigureAwait(false);
     }
 
     private static async Task AddAsync(CoreWriteDbContext context, List<string> keysToAdd, List<IApplicationScope> codeScopes)

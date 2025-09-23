@@ -118,8 +118,14 @@ spec:
                   name: applications
                   key: frontend-auth-secret
                   optional: false
-            - name: Applications__0__Scopes
-              value: '["application:read","application:create","application:update","application:delete"]'
+            - name: Applications__0__Scopes__0
+              value: "application:read"
+            - name: Applications__0__Scopes__1
+              value: "application:create"
+            - name: Applications__0__Scopes__2
+              value: "application:update"
+            - name: Applications__0__Scopes__3
+              value: "application:delete"
             - name: Applications__1__Key
               value: "middleware"
             - name: Applications__1__Name

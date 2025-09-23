@@ -1,12 +1,12 @@
 using Hangfire.Throttling;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using Software.Middleware.Domains.Application.Application.Events;
 using Software.Middleware.Domains.Application.Domain.Models.Entities;
 using Software.Middleware.Domains.Application.Domain.Options;
 using Software.Middleware.Domains.Application.Domain.Types;
 using Software.Middleware.Domains.Common.Persistence.Sql.Context;
 using Utils.Encryption.Infrastructure.Services.Encryption;
-using Utils.EntityFrameworkCore.Application.Events;
 using Utils.Hangfire.Domain.Types;
 using Utils.Hangfire.Infrastructure.Attributes;
 using Utils.Hangfire.Infrastructure.Jobs;
@@ -16,15 +16,15 @@ namespace Software.Middleware.Domains.Application.Application.Jobs;
 [HangfireQueue(HangfireQueue.System)]
 [Mutex("core:applications:synchronize")]
 public class SynchronizeConfiguredApplicationsJob(
-    ILogger<IHangfireJob<MigrationCompletedEvent>> logger,
+    ILogger<IHangfireJob<ApplicationScopesSynchronizedEvent>> logger,
     IDbContextFactory<CoreWriteDbContext> factory,
     IEncryptionService encryptionService,
-    IOptionsMonitor<ApplicationOptionsList> monitor) : BaseHangfireJob<MigrationCompletedEvent>(logger)
+    IOptionsMonitor<ApplicationOptionsList> monitor) : BaseHangfireJob<ApplicationScopesSynchronizedEvent>(logger)
 {
     private ApplicationOptionsList Options => monitor.CurrentValue;
 
     [HangfireJobName("Synchronize configured applications")]
-    public override async Task RunAsync(MigrationCompletedEvent @event, CancellationToken cancellationToken = default)
+    public override async Task RunAsync(ApplicationScopesSynchronizedEvent @event, CancellationToken cancellationToken = default)
     {
         await using var context = await factory.CreateDbContextAsync(cancellationToken).ConfigureAwait(false);
 
