@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [versionize](https://github.com/versionize/versionize) for commit guidelines.
 
+<a name="1.5.1"></a>
+## [1.5.1](https://www.github.com/SaveApis/Streamer.Bot-Cloud/releases/tag/v1.5.1) (2025-09-23)
+
+### 🐛 Bug Fixes
+
+* Fix application sync ([#28](https://www.github.com/SaveApis/Streamer.Bot-Cloud/issues/28)) ([ce7a230](https://www.github.com/SaveApis/Streamer.Bot-Cloud/commit/ce7a230ccdb881fcd586672d28d374a476ce4c43))
+
 <a name="1.5.0"></a>
 ## [1.5.0](https://www.github.com/SaveApis/Streamer.Bot-Cloud/releases/tag/v1.5.0) (2025-09-22)
 
