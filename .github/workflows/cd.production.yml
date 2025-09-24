@@ -303,6 +303,20 @@ jobs:
             -e 's|%ENCRYPTION_BOT_TWITCH_KEY%|${{ secrets.PROD_ENCRYPTION_BOT_TWITCH_KEY }}|g' \
             -e 's|%ENCRYPTION_BOT_DISCORD_KEY%|${{ secrets.PROD_ENCRYPTION_BOT_DISCORD_KEY }}|g' \
             -e 's|%ENCRYPTION_BOT_YOUTUBE_KEY%|${{ secrets.PROD_ENCRYPTION_BOT_YOUTUBE_KEY }}|g' \
+            -e 's|%JWT_MIDDLEWARE_SIGNING_KEY%|${{ secrets.PROD_JWT_MIDDLEWARE_SIGNING_KEY }}|g' \
+            -e 's|%JWT_MIDDLEWARE_ISSUER_AUDIENCE%|${{ secrets.PROD_JWT_MIDDLEWARE_ISSUER_AUDIENCE }}|g' \
+            -e 's|%JWT_EVENT_TWITCH_SIGNING_KEY%|${{ secrets.PROD_JWT_EVENT_TWITCH_SIGNING_KEY }}|g' \
+            -e 's|%JWT_EVENT_TWITCH_ISSUER_AUDIENCE%|${{ secrets.PROD_JWT_EVENT_TWITCH_ISSUER_AUDIENCE }}|g' \
+            -e 's|%JWT_EVENT_DISCORD_SIGNING_KEY%|${{ secrets.PROD_JWT_EVENT_DISCORD_SIGNING_KEY }}|g' \
+            -e 's|%JWT_EVENT_DISCORD_ISSUER_AUDIENCE%|${{ secrets.PROD_JWT_EVENT_DISCORD_ISSUER_AUDIENCE }}|g' \
+            -e 's|%JWT_EVENT_YOUTUBE_SIGNING_KEY%|${{ secrets.PROD_JWT_EVENT_YOUTUBE_SIGNING_KEY }}|g' \
+            -e 's|%JWT_EVENT_YOUTUBE_ISSUER_AUDIENCE%|${{ secrets.PROD_JWT_EVENT_YOUTUBE_ISSUER_AUDIENCE }}|g' \
+            -e 's|%JWT_BOT_TWITCH_SIGNING_KEY%|${{ secrets.PROD_JWT_BOT_TWITCH_SIGNING_KEY }}|g' \
+            -e 's|%JWT_BOT_TWITCH_ISSUER_AUDIENCE%|${{ secrets.PROD_JWT_BOT_TWITCH_ISSUER_AUDIENCE }}|g' \
+            -e 's|%JWT_BOT_DISCORD_SIGNING_KEY%|${{ secrets.PROD_JWT_BOT_DISCORD_SIGNING_KEY }}|g' \
+            -e 's|%JWT_BOT_DISCORD_ISSUER_AUDIENCE%|${{ secrets.PROD_JWT_BOT_DISCORD_ISSUER_AUDIENCE }}|g' \
+            -e 's|%JWT_BOT_YOUTUBE_SIGNING_KEY%|${{ secrets.PROD_JWT_BOT_YOUTUBE_SIGNING_KEY }}|g' \
+            -e 's|%JWT_BOT_YOUTUBE_ISSUER_AUDIENCE%|${{ secrets.PROD_JWT_BOT_YOUTUBE_ISSUER_AUDIENCE }}|g' \
             -e 's|%VERSION%|${{ needs.read-version.outputs.version }}|g' {} +
       - name: Find changed files
         run: find Kubernetes/ -type f -name '*.yaml.bak'

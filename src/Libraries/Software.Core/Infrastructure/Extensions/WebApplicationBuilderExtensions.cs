@@ -11,6 +11,7 @@ using Utils.Correlation;
 using Utils.Encryption;
 using Utils.EntityFrameworkCore;
 using Utils.Hangfire;
+using Utils.Jwt;
 using Utils.Mediator;
 using Utils.Rest;
 using Utils.Swagger;
@@ -40,6 +41,7 @@ public static class WebApplicationBuilderExtensions
                         containerBuilder.RegisterModule(new RestModule(assemblyHelper));
                         containerBuilder.RegisterModule<CorrelationModule>();
                         containerBuilder.RegisterModule<SwaggerModule>();
+                        containerBuilder.RegisterModule(new JwtModule(context.Configuration, context.HostingEnvironment));
 
                         containerBuilder.RegisterModule(new MediatorModule(assemblyHelper));
                         containerBuilder.RegisterModule(new ValidationModule(assemblyHelper));
@@ -60,6 +62,7 @@ public static class WebApplicationBuilderExtensions
         yield return typeof(RestModule).Assembly;
         yield return typeof(CorrelationModule).Assembly;
         yield return typeof(SwaggerModule).Assembly;
+        yield return typeof(JwtModule).Assembly;
 
         yield return typeof(MediatorModule).Assembly;
         yield return typeof(ValidationModule).Assembly;

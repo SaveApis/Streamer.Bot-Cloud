@@ -17,6 +17,7 @@
     <ProjectReference Include="..\Utils\Utils.Encryption\Utils.Encryption.csproj" />
     <ProjectReference Include="..\Utils\Utils.EntityFrameworkCore\Utils.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\Utils\Utils.Hangfire\Utils.Hangfire.csproj" />
+    <ProjectReference Include="..\Utils\Utils.Jwt\Utils.Jwt.csproj" />
     <ProjectReference Include="..\Utils\Utils.Mediator\Utils.Mediator.csproj" />
     <ProjectReference Include="..\Utils\Utils.Rest\Utils.Rest.csproj" />
     <ProjectReference Include="..\Utils\Utils.Swagger\Utils.Swagger.csproj" />

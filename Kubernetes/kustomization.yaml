@@ -63,3 +63,19 @@ secretGenerator:
       - bot-discord-auth-secret=%APPLICATIONS_BOT_DISCORD_AUTH_SECRET%
       - bot-youtube-auth-id=%APPLICATIONS_BOT_YOUTUBE_AUTH_ID%
       - bot-youtube-auth-secret=%APPLICATIONS_BOT_YOUTUBE_AUTH_SECRET%
+  - name: jwt
+    literals:
+      - middleware-signing-key=%JWT_MIDDLEWARE_SIGNING_KEY%
+      - middleware-issuer-audience=%JWT_MIDDLEWARE_ISSUER_AUDIENCE%
+      - event-twitch-signing-key=%JWT_EVENT_TWITCH_SIGNING_KEY%
+      - event-twitch-issuer-audience=%JWT_EVENT_TWITCH_ISSUER_AUDIENCE%
+      - event-discord-signing-key=%JWT_EVENT_DISCORD_SIGNING_KEY%
+      - event-discord-issuer-audience=%JWT_EVENT_DISCORD_ISSUER_AUDIENCE%
+      - event-youtube-signing-key=%JWT_EVENT_YOUTUBE_SIGNING_KEY%
+      - event-youtube-issuer-audience=%JWT_EVENT_YOUTUBE_ISSUER_AUDIENCE%
+      - bot-twitch-signing-key=%JWT_BOT_TWITCH_SIGNING_KEY%
+      - bot-twitch-issuer-audience=%JWT_BOT_TWITCH_ISSUER_AUDIENCE%
+      - bot-discord-signing-key=%JWT_BOT_DISCORD_SIGNING_KEY%
+      - bot-discord-issuer-audience=%JWT_BOT_DISCORD_ISSUER_AUDIENCE%
+      - bot-youtube-signing-key=%JWT_BOT_YOUTUBE_SIGNING_KEY%
+      - bot-youtube-issuer-audience=%JWT_BOT_YOUTUBE_ISSUER_AUDIENCE%
