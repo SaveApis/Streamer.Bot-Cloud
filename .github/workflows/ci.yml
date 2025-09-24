@@ -42,7 +42,7 @@ jobs:
           fetch-depth: 0
       - name: Cache
         id: cache
-        uses: actions/cache@v4.2.4
+        uses: actions/cache@v4.3.0
         with:
           path: |
             ~/.nuget/packages
@@ -77,7 +77,7 @@ jobs:
           fetch-depth: 0
       - name: Cache
         id: cache
-        uses: actions/cache@v4.2.4
+        uses: actions/cache@v4.3.0
         with:
           path: |
             ~/.nuget/packages
@@ -111,7 +111,7 @@ jobs:
           fetch-depth: 0
       - name: Cache
         id: cache
-        uses: actions/cache@v4.2.4
+        uses: actions/cache@v4.3.0
         with:
           path: |
             ~/.nuget/packages
@@ -145,7 +145,7 @@ jobs:
           fetch-depth: 0
       - name: Cache
         id: cache
-        uses: actions/cache@v4.2.4
+        uses: actions/cache@v4.3.0
         with:
           path: |
             ~/.nuget/packages
