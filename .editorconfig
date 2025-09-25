@@ -1,0 +1,14 @@
+
+[*]
+
+# Microsoft .NET properties
+csharp_new_line_before_members_in_object_initializers = true
+csharp_preferred_modifier_order = public, private, static, protected, file, new, internal, abstract, readonly, override, async, sealed, extern, unsafe, volatile, virtual, required:suggestion
+
+# ReSharper properties
+resharper_blank_lines_after_block_statements = 1
+resharper_braces_for_foreach = required
+resharper_csharp_max_line_length = 227
+resharper_csharp_remove_blank_lines_near_braces_in_code = false
+resharper_wrap_object_and_collection_initializer_style = chop_always
+resharper_wrap_ternary_expr_style = chop_if_long
