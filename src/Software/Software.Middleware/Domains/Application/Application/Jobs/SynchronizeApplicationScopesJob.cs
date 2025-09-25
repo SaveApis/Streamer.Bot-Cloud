@@ -36,7 +36,7 @@ public class SynchronizeApplicationScopesJob(
 
         await mediator.Publish(new ApplicationScopesSynchronizedEvent(), cancellationToken).ConfigureAwait(false);
     }
-    
+
     private async Task SynchronizeAsync(List<IApplicationScope> codeScopes, CancellationToken cancellationToken)
     {
         await using var context = await factory.CreateDbContextAsync(cancellationToken).ConfigureAwait(false);
