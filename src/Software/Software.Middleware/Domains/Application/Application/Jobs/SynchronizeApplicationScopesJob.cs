@@ -22,15 +22,24 @@ public class SynchronizeApplicationScopesJob(
 {
     protected override bool CheckSupport(MigrationCompletedEvent @event)
     {
-        return @event.DbContextType == typeof(CoreWriteDbContext) && scopes.Any();
+        return @event.DbContextType == typeof(CoreWriteDbContext);
     }
 
     [HangfireJobName("Synchronize application scopes")]
     public override async Task RunAsync(MigrationCompletedEvent @event, CancellationToken cancellationToken = default)
     {
-        await using var context = await factory.CreateDbContextAsync(cancellationToken).ConfigureAwait(false);
-
         var codeScopes = scopes.ToList();
+        if (codeScopes.Count > 0)
+        {
+            await SynchronizeAsync(codeScopes, cancellationToken).ConfigureAwait(false);
+        }
+
+        await mediator.Publish(new ApplicationScopesSynchronizedEvent(), cancellationToken).ConfigureAwait(false);
+    }
+    
+    private async Task SynchronizeAsync(List<IApplicationScope> codeScopes, CancellationToken cancellationToken)
+    {
+        await using var context = await factory.CreateDbContextAsync(cancellationToken).ConfigureAwait(false);
         var dbScopes = await context.ApplicationScopes
             .AsNoTracking()
             .ToListAsync(cancellationToken)
@@ -51,8 +60,6 @@ public class SynchronizeApplicationScopesJob(
 
         var count = await context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
         Logger.LogInformation("Synchronized total of {Count} application scopes", count);
-
-        await mediator.Publish(new ApplicationScopesSynchronizedEvent(), cancellationToken).ConfigureAwait(false);
     }
 
     private static async Task AddAsync(CoreWriteDbContext context, List<string> keysToAdd, List<IApplicationScope> codeScopes)
