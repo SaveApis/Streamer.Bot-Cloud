@@ -1,19 +1,9 @@
 ﻿FROM mcr.microsoft.com/dotnet/aspnet:9.0-alpine AS base
 WORKDIR /app
-EXPOSE 8080
 
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["src/Libraries/Software.Core/Software.Core.csproj", "src/Libraries/Software.Core/"]
-COPY ["src/Libraries/Utils/Utils.Core/Utils.Core.csproj", "src/Libraries/Utils/Utils.Core/"]
-COPY ["src/Libraries/Utils/Utils.Correlation/Utils.Correlation.csproj", "src/Libraries/Utils/Utils.Correlation/"]
-COPY ["src/Libraries/Utils/Utils.Hangfire/Utils.Hangfire.csproj", "src/Libraries/Utils/Utils.Hangfire/"]
-COPY ["src/Libraries/Utils/Utils.Mediator/Utils.Mediator.csproj", "src/Libraries/Utils/Utils.Mediator/"]
-COPY ["src/Libraries/Utils/Utils.Rest/Utils.Rest.csproj", "src/Libraries/Utils/Utils.Rest/"]
-COPY ["src/Libraries/Utils/Utils.Swagger/Utils.Swagger.csproj", "src/Libraries/Utils/Utils.Swagger/"]
-COPY ["src/Libraries/Utils/Utils.Validation/Utils.Validation.csproj", "src/Libraries/Utils/Utils.Validation/"]
-COPY ["src/Software/Bot/Software.Bot.YouTube/Software.Bot.YouTube.csproj", "src/Software/Bot/Software.Bot.YouTube/"]
 
 RUN --mount=type=secret,id=hangfire_ace_url \
     --mount=type=secret,id=hangfire_ace_user \
@@ -24,7 +14,6 @@ RUN --mount=type=secret,id=hangfire_ace_url \
     dotnet nuget add source "$(cat /run/secrets/hangfire_ace_url)" -n HangfireAce -u "$(cat /run/secrets/hangfire_ace_user)" -p "$(cat /run/secrets/hangfire_ace_password)" --store-password-in-clear-text && \
     dotnet nuget add source "$(cat /run/secrets/hangfire_pro_url)" -n HangfirePro -u "$(cat /run/secrets/hangfire_pro_user)" -p "$(cat /run/secrets/hangfire_pro_password)" --store-password-in-clear-text
 
-RUN --mount=type=cache,target=/root/.nuget/packages dotnet restore "src/Software/Bot/Software.Bot.YouTube/Software.Bot.YouTube.csproj"
 COPY . .
 WORKDIR "/src/src/Software/Bot/Software.Bot.YouTube"
 RUN dotnet build "./Software.Bot.YouTube.csproj" -c $BUILD_CONFIGURATION -o /app/build
