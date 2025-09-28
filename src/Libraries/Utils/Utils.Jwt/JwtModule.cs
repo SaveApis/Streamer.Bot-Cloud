@@ -5,9 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
-using Utils.Jwt.Application.Builders;
 using Utils.Jwt.Domain.Options;
-using Utils.Jwt.Infrastructure;
 
 namespace Utils.Jwt;
 
@@ -47,7 +45,5 @@ public class JwtModule(IConfiguration configuration, IHostEnvironment environmen
             );
 
         builder.Populate(collection);
-
-        builder.RegisterType<JwtBuilder>().As<IJwtBuilder>();
     }
 }

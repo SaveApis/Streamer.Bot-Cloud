@@ -8,22 +8,17 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Converters;
-using Utils.Core.Infrastructure.Helpers;
 using Utils.Hangfire.Application.Events;
 using Utils.Hangfire.Domain.Options;
 using Utils.Hangfire.Domain.Types;
-using Utils.Hangfire.Infrastructure.Events;
-using Utils.Hangfire.Infrastructure.Jobs;
 
 namespace Utils.Hangfire;
 
-public class HangfireModule(IAssemblyHelper assemblyHelper, IConfiguration configuration) : Module
+public class HangfireModule(IConfiguration configuration) : Module
 {
     protected override void Load(ContainerBuilder builder)
     {
         RegisterOptions(builder, configuration);
-        RegisterJobs(builder, assemblyHelper);
-        RegisterRecurringEvents(builder, assemblyHelper);
         RegisterServices(builder);
 
         builder.RegisterBuildCallback(scope => GlobalConfiguration.Configuration.UseAutofacActivator(scope));
@@ -43,18 +38,6 @@ public class HangfireModule(IAssemblyHelper assemblyHelper, IConfiguration confi
         collection.Configure<HangfireOption>(configuration.GetSection("Hangfire"));
 
         builder.Populate(collection);
-    }
-    private static void RegisterJobs(ContainerBuilder builder, IAssemblyHelper assemblyHelper)
-    {
-        builder.RegisterAssemblyTypes(assemblyHelper.GetAssemblies().ToArray())
-            .Where(t => !t.IsAbstract && t.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IHangfireJob<>)))
-            .AsImplementedInterfaces();
-    }
-    private static void RegisterRecurringEvents(ContainerBuilder builder, IAssemblyHelper assemblyHelper)
-    {
-        builder.RegisterAssemblyTypes(assemblyHelper.GetAssemblies().ToArray())
-            .Where(t => !t.IsAbstract && t.IsAssignableTo<IHangfireRecurringEvent>())
-            .AsImplementedInterfaces();
     }
     private static void RegisterServices(ContainerBuilder builder)
     {

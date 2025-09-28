@@ -12,7 +12,7 @@ using Utils.Encryption;
 using Utils.EntityFrameworkCore;
 using Utils.Hangfire;
 using Utils.Jwt;
-using Utils.Mapper;
+using Utils.Mapper.Infrastructure.Mapping;
 using Utils.Mediator;
 using Utils.Rest;
 using Utils.Swagger;
@@ -46,10 +46,9 @@ public static class WebApplicationBuilderExtensions
 
                         containerBuilder.RegisterModule(new MediatorModule(assemblyHelper));
                         containerBuilder.RegisterModule(new ValidationModule(assemblyHelper));
-                        containerBuilder.RegisterModule(new HangfireModule(assemblyHelper, context.Configuration));
+                        containerBuilder.RegisterModule(new HangfireModule(context.Configuration));
                         containerBuilder.RegisterModule(new EntityFrameworkCoreModule(assemblyHelper, context.Configuration));
                         containerBuilder.RegisterModule(new EncryptionModule(context.Configuration));
-                        containerBuilder.RegisterModule(new MapperModule(assemblyHelper));
 
                         registerSoftwareModulesAction?.Invoke(context, containerBuilder, assemblyHelper);
                     }
@@ -71,6 +70,6 @@ public static class WebApplicationBuilderExtensions
         yield return typeof(HangfireModule).Assembly;
         yield return typeof(EntityFrameworkCoreModule).Assembly;
         yield return typeof(EncryptionModule).Assembly;
-        yield return typeof(MapperModule).Assembly;
+        yield return typeof(IMapper).Assembly;
     }
 }
