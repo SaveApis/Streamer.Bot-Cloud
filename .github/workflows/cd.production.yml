@@ -36,7 +36,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v5.0.0
       - name: Docker Login
-        uses: docker/login-action@v3.5.0
+        uses: docker/login-action@v3.6.0
         with:
           registry: registry.digitalocean.com
           username: ${{ secrets.DIGITALOCEAN_USERNAME }}
@@ -67,7 +67,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v5.0.0
       - name: Docker Login
-        uses: docker/login-action@v3.5.0
+        uses: docker/login-action@v3.6.0
         with:
           registry: registry.digitalocean.com
           username: ${{ secrets.DIGITALOCEAN_USERNAME }}
@@ -98,7 +98,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v5.0.0
       - name: Docker Login
-        uses: docker/login-action@v3.5.0
+        uses: docker/login-action@v3.6.0
         with:
           registry: registry.digitalocean.com
           username: ${{ secrets.DIGITALOCEAN_USERNAME }}
@@ -129,7 +129,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v5.0.0
       - name: Docker Login
-        uses: docker/login-action@v3.5.0
+        uses: docker/login-action@v3.6.0
         with:
           registry: registry.digitalocean.com
           username: ${{ secrets.DIGITALOCEAN_USERNAME }}
@@ -160,7 +160,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v5.0.0
       - name: Docker Login
-        uses: docker/login-action@v3.5.0
+        uses: docker/login-action@v3.6.0
         with:
           registry: registry.digitalocean.com
           username: ${{ secrets.DIGITALOCEAN_USERNAME }}
@@ -191,7 +191,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v5.0.0
       - name: Docker Login
-        uses: docker/login-action@v3.5.0
+        uses: docker/login-action@v3.6.0
         with:
           registry: registry.digitalocean.com
           username: ${{ secrets.DIGITALOCEAN_USERNAME }}
@@ -222,7 +222,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v5.0.0
       - name: Docker Login
-        uses: docker/login-action@v3.5.0
+        uses: docker/login-action@v3.6.0
         with:
           registry: registry.digitalocean.com
           username: ${{ secrets.DIGITALOCEAN_USERNAME }}
