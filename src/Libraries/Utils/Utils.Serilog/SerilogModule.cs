@@ -27,6 +27,7 @@ public class SerilogModule(IConfiguration configuration) : Module
 
             loggerConfiguration.MinimumLevel.Verbose();
             loggerConfiguration.Enrich.FromLogContext();
+            loggerConfiguration.Enrich.WithProperty("Application", loggingOptions.ApplicationName);
             loggerConfiguration.MinimumLevel.Override("Hangfire", LogEventLevel.Information);
             loggerConfiguration.MinimumLevel.Override("Microsoft.Extensions.Hosting", LogEventLevel.Information);
             loggerConfiguration.MinimumLevel.Override("Correlate.AspNetCore", LogEventLevel.Information);
