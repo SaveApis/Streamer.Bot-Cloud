@@ -96,6 +96,8 @@ spec:
             - name: Jwt__ExpirationMinutes
               value: "60"
 
+            - name: Logging__ApplicationName
+              value: "bot-discord"
             - name: Logging__BetterStack__Host
               valueFrom:
                 secretKeyRef:
