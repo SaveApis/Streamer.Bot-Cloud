@@ -10,6 +10,7 @@
     <ItemGroup>
       <ProjectReference Include="..\Utils.Core\Utils.Core.csproj" />
       <ProjectReference Include="..\Utils.Mediator\Utils.Mediator.csproj" />
+      <ProjectReference Include="..\Utils.Serilog\Utils.Serilog.csproj" />
     </ItemGroup>
 
     <ItemGroup>
@@ -20,7 +21,7 @@
       <PackageReference Include="Hangfire.Pro" Version="3.0.4" />
       <PackageReference Include="Hangfire.Pro.Redis" Version="3.3.1" />
       <PackageReference Include="Hangfire.Throttling" Version="1.4.1" />
-      <PackageReference Include="StackExchange.Redis" Version="2.9.17" />
+      <PackageReference Include="StackExchange.Redis" Version="2.9.25" />
     </ItemGroup>
 
 </Project>

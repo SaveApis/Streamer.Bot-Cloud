@@ -79,3 +79,7 @@ secretGenerator:
       - bot-discord-issuer-audience=%JWT_BOT_DISCORD_ISSUER_AUDIENCE%
       - bot-youtube-signing-key=%JWT_BOT_YOUTUBE_SIGNING_KEY%
       - bot-youtube-issuer-audience=%JWT_BOT_YOUTUBE_ISSUER_AUDIENCE%
+  - name: betterstack
+    literals:
+      - host=%BETTERSTACK_HOST%
+      - token=%BETTERSTACK_TOKEN%

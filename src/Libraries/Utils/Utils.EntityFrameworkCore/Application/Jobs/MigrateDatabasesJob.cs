@@ -1,7 +1,7 @@
 using Hangfire.Throttling;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
+using Serilog;
 using Utils.EntityFrameworkCore.Application.Events;
 using Utils.EntityFrameworkCore.Infrastructure.Context;
 using Utils.Hangfire.Application.Events;
@@ -13,7 +13,7 @@ namespace Utils.EntityFrameworkCore.Application.Jobs;
 
 [HangfireQueue(HangfireQueue.System)]
 [Mutex("mysql:database:migrate")]
-public class MigrateDatabasesJob(ILogger<IHangfireJob<ApplicationStartedEvent>> logger, IMediator mediator, IEnumerable<DbContext> dbContexts) : BaseHangfireJob<ApplicationStartedEvent>(logger)
+public class MigrateDatabasesJob(ILogger logger, IMediator mediator, IEnumerable<DbContext> dbContexts) : BaseHangfireJob<ApplicationStartedEvent>(logger)
 {
     protected override bool CheckSupport(ApplicationStartedEvent @event)
     {
@@ -26,7 +26,7 @@ public class MigrateDatabasesJob(ILogger<IHangfireJob<ApplicationStartedEvent>> 
         var dbContextList = dbContexts.ToList();
         if (dbContextList.Count == 0)
         {
-            Logger.LogInformation("No DbContext found to migrate.");
+            Logger.Information("No DbContext found to migrate.");
             return;
         }
 
@@ -35,12 +35,12 @@ public class MigrateDatabasesJob(ILogger<IHangfireJob<ApplicationStartedEvent>> 
             var dbContextName = dbContext.GetType().Name;
             if (dbContext is not IWriteDbContext)
             {
-                Logger.LogDebug("Skipping migration for DbContext {DbContextName} because it does not implement IWriteDbContext.", dbContextName);
+                Logger.Debug("Skipping migration for DbContext {DbContextName} because it does not implement IWriteDbContext.", dbContextName);
                 continue;
             }
 
             await dbContext.Database.MigrateAsync(cancellationToken).ConfigureAwait(false);
-            Logger.LogInformation("Migrated database for DbContext {DbContextName}.", dbContextName);
+            Logger.Information("Migrated database for DbContext {DbContextName}.", dbContextName);
 
             await mediator.Publish(new MigrationCompletedEvent(dbContext.GetType()), cancellationToken).ConfigureAwait(false);
         }

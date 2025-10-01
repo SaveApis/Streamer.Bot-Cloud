@@ -1,11 +1,12 @@
-using Microsoft.Extensions.Logging;
+using Serilog;
 using Utils.Hangfire.Infrastructure.Events;
 
 namespace Utils.Hangfire.Infrastructure.Jobs;
 
-public abstract class BaseHangfireJob<TEvent>(ILogger<IHangfireJob<TEvent>> logger) : IHangfireJob<TEvent> where TEvent : IHangfireEvent
+public abstract class BaseHangfireJob<TEvent>(ILogger logger) : IHangfireJob<TEvent> where TEvent : IHangfireEvent
 {
-    protected ILogger<IHangfireJob<TEvent>> Logger { get; } = logger;
+    protected ILogger Logger { get; } = logger;
+
     public virtual Task<bool> CheckSupportAsync(TEvent @event, CancellationToken cancellationToken = default)
     {
         return Task.FromResult(CheckSupport(@event));

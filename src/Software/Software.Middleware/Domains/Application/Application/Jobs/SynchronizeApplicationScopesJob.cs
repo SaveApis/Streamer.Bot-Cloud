@@ -9,13 +9,14 @@ using Utils.EntityFrameworkCore.Application.Events;
 using Utils.Hangfire.Domain.Types;
 using Utils.Hangfire.Infrastructure.Attributes;
 using Utils.Hangfire.Infrastructure.Jobs;
+using ILogger = Serilog.ILogger;
 
 namespace Software.Middleware.Domains.Application.Application.Jobs;
 
 [HangfireQueue(HangfireQueue.System)]
 [Mutex("core:applications:scopes:synchronize")]
 public class SynchronizeApplicationScopesJob(
-    ILogger<IHangfireJob<MigrationCompletedEvent>> logger,
+    ILogger logger,
     IDbContextFactory<CoreWriteDbContext> factory,
     IMediator mediator,
     IEnumerable<IApplicationScope> scopes) : BaseHangfireJob<MigrationCompletedEvent>(logger)
@@ -51,7 +52,7 @@ public class SynchronizeApplicationScopesJob(
         var keysToAdd = codeScopeKeys.Except(dbScopeKeys).ToList();
         var keysToRemove = dbScopeKeys.Except(codeScopeKeys).ToList();
         var keysToUpdate = codeScopeKeys.Intersect(dbScopeKeys).ToList();
-        Logger.LogInformation("Found {AddCount} scopes to add, {RemoveCount} scopes to remove and {UpdateCount} scopes to update", keysToAdd.Count, keysToRemove.Count, keysToUpdate.Count);
+        Logger.Information("Found {AddCount} scopes to add, {RemoveCount} scopes to remove and {UpdateCount} scopes to update", keysToAdd.Count, keysToRemove.Count, keysToUpdate.Count);
 
         var addTask = AddAsync(context, keysToAdd, codeScopes);
         var removeTask = RemoveAsync(context, keysToRemove);
@@ -59,7 +60,7 @@ public class SynchronizeApplicationScopesJob(
         await Task.WhenAll(addTask, removeTask, updateTask).ConfigureAwait(false);
 
         var count = await context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
-        Logger.LogInformation("Synchronized total of {Count} application scopes", count);
+        Logger.Information("Synchronized total of {Count} application scopes", count);
     }
 
     private static async Task AddAsync(CoreWriteDbContext context, List<string> keysToAdd, List<IApplicationScope> codeScopes)
