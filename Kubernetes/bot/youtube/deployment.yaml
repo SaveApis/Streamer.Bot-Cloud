@@ -95,5 +95,18 @@ spec:
                   optional: false
             - name: Jwt__ExpirationMinutes
               value: "60"
+
+            - name: Logging__BetterStack__Host
+              valueFrom:
+                secretKeyRef:
+                  name: betterstack
+                  key: host
+                  optional: false
+            - name: Logging__BetterStack__Token
+              valueFrom:
+                secretKeyRef:
+                  name: betterstack
+                  key: token
+                  optional: false
       restartPolicy: Always
       

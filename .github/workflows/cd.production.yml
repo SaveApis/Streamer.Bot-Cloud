@@ -317,6 +317,8 @@ jobs:
             -e 's|%JWT_BOT_DISCORD_ISSUER_AUDIENCE%|${{ secrets.PROD_JWT_BOT_DISCORD_ISSUER_AUDIENCE }}|g' \
             -e 's|%JWT_BOT_YOUTUBE_SIGNING_KEY%|${{ secrets.PROD_JWT_BOT_YOUTUBE_SIGNING_KEY }}|g' \
             -e 's|%JWT_BOT_YOUTUBE_ISSUER_AUDIENCE%|${{ secrets.PROD_JWT_BOT_YOUTUBE_ISSUER_AUDIENCE }}|g' \
+            -e 's|%BETTERSTACK_HOST%|${{ secrets.PROD_BETTERSTACK_HOST }}|g' \
+            -e 's|%BETTERSTACK_TOKEN%|${{ secrets.PROD_BETTERSTACK_TOKEN }}|g' \
             -e 's|%VERSION%|${{ needs.read-version.outputs.version }}|g' {} +
       - name: Find changed files
         run: find Kubernetes/ -type f -name '*.yaml.bak'

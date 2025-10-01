@@ -10,13 +10,14 @@ using Utils.Encryption.Infrastructure.Services.Encryption;
 using Utils.Hangfire.Domain.Types;
 using Utils.Hangfire.Infrastructure.Attributes;
 using Utils.Hangfire.Infrastructure.Jobs;
+using ILogger = Serilog.ILogger;
 
 namespace Software.Middleware.Domains.Application.Application.Jobs;
 
 [HangfireQueue(HangfireQueue.System)]
 [Mutex("core:applications:synchronize")]
 public class SynchronizeConfiguredApplicationsJob(
-    ILogger<IHangfireJob<ApplicationScopesSynchronizedEvent>> logger,
+    ILogger logger,
     IDbContextFactory<CoreWriteDbContext> factory,
     IEncryptionService encryptionService,
     IOptionsMonitor<ApplicationOptionsList> monitor) : BaseHangfireJob<ApplicationScopesSynchronizedEvent>(logger)
@@ -39,7 +40,7 @@ public class SynchronizeConfiguredApplicationsJob(
         var keysToAdd = configurationApplicationKeys.Except(dbApplicationKeys).ToList();
         var keysToRemove = dbApplicationKeys.Except(configurationApplicationKeys).ToList();
         var keysToUpdate = configurationApplicationKeys.Intersect(dbApplicationKeys).ToList();
-        Logger.LogInformation("Found {AddCount} applications to add, {RemoveCount} applications to remove and {UpdateCount} applications to update", keysToAdd.Count, keysToRemove.Count,
+        Logger.Information("Found {AddCount} applications to add, {RemoveCount} applications to remove and {UpdateCount} applications to update", keysToAdd.Count, keysToRemove.Count,
             keysToUpdate.Count);
 
         var addTask = AddAsync(context, keysToAdd, Options, encryptionService);
@@ -48,7 +49,7 @@ public class SynchronizeConfiguredApplicationsJob(
         await Task.WhenAll(addTask, removeTask, updateTask).ConfigureAwait(false);
 
         var count = await context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
-        Logger.LogInformation("Synchronized total of {Count} applications", count);
+        Logger.Information("Synchronized total of {Count} applications", count);
     }
 
     private static async Task AddAsync(CoreWriteDbContext context, List<string> keys, ApplicationOptionsList options, IEncryptionService encryptionService)

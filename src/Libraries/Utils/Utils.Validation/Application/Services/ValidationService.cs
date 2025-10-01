@@ -1,7 +1,7 @@
 using Autofac;
 using FluentValidation;
 using FluentValidation.Results;
-using Microsoft.Extensions.Logging;
+using Serilog;
 using Utils.Validation.Infrastructure.Services;
 
 namespace Utils.Validation.Application.Services;
@@ -38,8 +38,8 @@ public class ValidationService(ILifetimeScope lifetimeScope) : IValidationServic
         var validators = lifetimeScope.Resolve<IEnumerable<IValidator<T>>>().ToList();
         if (validators.Count == 0)
         {
-            var logger = lifetimeScope.Resolve<ILogger<ValidationService>>();
-            logger.LogWarning("No validators found for type {Type}", typeof(T).FullName);
+            var logger = lifetimeScope.Resolve<ILogger>();
+            logger.Warning("No validators found for type {Type}", typeof(T).FullName);
         }
 
         return validators.AsReadOnly();
