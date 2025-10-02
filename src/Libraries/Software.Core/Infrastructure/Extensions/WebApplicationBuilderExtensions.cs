@@ -12,7 +12,6 @@ using Utils.Encryption;
 using Utils.EntityFrameworkCore;
 using Utils.Hangfire;
 using Utils.Jwt;
-using Utils.Mapper.Infrastructure.Mapping;
 using Utils.Mediator;
 using Utils.Rest;
 using Utils.Serilog;
@@ -72,7 +71,6 @@ public static class WebApplicationBuilderExtensions
         yield return typeof(HangfireModule).Assembly;
         yield return typeof(EntityFrameworkCoreModule).Assembly;
         yield return typeof(EncryptionModule).Assembly;
-        yield return typeof(IMapper).Assembly;
         yield return typeof(SerilogModule).Assembly;
     }
 }
