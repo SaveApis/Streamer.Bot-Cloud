@@ -1,31 +1,87 @@
-using System.Text;
 using Software.Middleware.Domains.Application.Domain.Types;
-using Utils.Encryption.Infrastructure.Services.Encryption;
+using Software.Middleware.Domains.Application.Domain.VO;
+using Stateless;
 
 namespace Software.Middleware.Domains.Application.Domain.Models.Entities;
 
 public class ApplicationEntity
 {
-    #region Entity
+    private readonly IList<ApplicationScopeEntity> _scopes = [];
 
-    public bool HasChanges(string name, string authId, string authSecret, List<ApplicationScopeEntity> applicationScopes, IEncryptionService encryptionService)
+    private ApplicationEntity(string key, DateTime createdAt, DateTime? updatedAt, ApplicationState state, string name, string? description, string authId, string authSecret, string iv)
     {
-        var normalSecret = Encoding.UTF8.GetString(Convert.FromBase64String(authSecret));
-        var encryptedSecret = encryptionService.Encrypt(normalSecret, Iv, out _);
+        _stateMachine = new StateMachine<ApplicationState, ApplicationStateTrigger>(() => State, s => State = s);
+        ConfigureStateMachine();
 
-        return !string.Equals(Name, name, StringComparison.InvariantCultureIgnoreCase)
-               || !string.Equals(AuthId, authId, StringComparison.InvariantCultureIgnoreCase)
-               || !string.Equals(AuthSecret, encryptedSecret, StringComparison.InvariantCultureIgnoreCase)
-               || applicationScopes.Count != Scopes.Count
-               || applicationScopes.Any(x => Scopes.All(s => s.Key != x.Key));
+        Key = key;
+        CreatedAt = createdAt;
+        UpdatedAt = updatedAt;
+        State = state;
+        Name = name;
+        Description = description;
+        AuthId = authId;
+        AuthSecret = authSecret;
+        Iv = iv;
     }
 
-    public void UpdateFull(string name, string authId, string authSecret, List<ApplicationScopeEntity> scopes, IEncryptionService encryptionService)
+    public string Key { get; }
+
+    public DateTime CreatedAt { get; }
+    public DateTime? UpdatedAt { get; private set; }
+
+    public ApplicationState State { get; private set; }
+
+    public string Name { get; private set; }
+    public string? Description { get; private set; }
+
+    public string AuthId { get; private set; }
+    public string AuthSecret { get; private set; }
+    public string Iv { get; private set; }
+
+    public IReadOnlyList<ApplicationScopeEntity> Scopes => _scopes.AsReadOnly();
+
+    #region StateMachine
+
+    private readonly StateMachine<ApplicationState, ApplicationStateTrigger> _stateMachine;
+
+    private void ConfigureStateMachine()
     {
-        UpdateName(name);
-        UpdateAuthId(authId);
-        UpdateAuthSecret(authSecret, encryptionService);
-        UpdateScopes(scopes);
+        _stateMachine.Configure(ApplicationState.Active)
+            .Permit(ApplicationStateTrigger.Deactivate, ApplicationState.Inactive);
+        _stateMachine.Configure(ApplicationState.Inactive)
+            .Permit(ApplicationStateTrigger.Activate, ApplicationState.Active);
+    }
+
+    private enum ApplicationStateTrigger
+    {
+        Activate,
+        Deactivate
+    }
+
+    #endregion StateMachine
+
+    #region Entity
+
+    public static ApplicationEntity Create(ApplicationKey key, string name, string? description, string authId, string encryptedAuthSecret, string iv, IReadOnlyList<ApplicationScopeEntity> scopes)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(name, nameof(name));
+        ArgumentException.ThrowIfNullOrWhiteSpace(authId, nameof(authId));
+        ArgumentException.ThrowIfNullOrWhiteSpace(encryptedAuthSecret, nameof(encryptedAuthSecret));
+        ArgumentException.ThrowIfNullOrWhiteSpace(iv, nameof(iv));
+
+        var entity = new ApplicationEntity(key.Value, DateTime.UtcNow, null, ApplicationState.Active, name, description, authId, encryptedAuthSecret, iv);
+        entity.UpdateScopes(scopes);
+
+        return entity;
+    }
+
+    public bool HasChanges(string name, string? description, string authId, string encryptedAuthSecret, IReadOnlyList<string> scopes)
+    {
+        return !Name.Equals(name)
+               || !string.Equals(Description, description)
+               || !AuthId.Equals(authId)
+               || !AuthSecret.Equals(encryptedAuthSecret)
+               || !Scopes.Select(s => s.Key).OrderBy(s => s).SequenceEqual(scopes.OrderBy(s => s));
     }
 
     public void UpdateName(string name)
@@ -33,86 +89,49 @@ public class ApplicationEntity
         ArgumentException.ThrowIfNullOrWhiteSpace(name, nameof(name));
 
         Name = name;
+        UpdatedAt = DateTime.UtcNow;
     }
 
-    public void UpdateAuthId(string authId)
+    public void UpdateDescription(string? description)
     {
-        ArgumentException.ThrowIfNullOrWhiteSpace(authId, nameof(authId));
-
-        AuthId = authId;
+        Description = description;
+        UpdatedAt = DateTime.UtcNow;
     }
 
-    public void UpdateAuthSecret(string authSecret, IEncryptionService encryptionService)
+    public void UpdateCredentials(string encryptedAuthId, string encryptedAuthSecret, string iv)
     {
-        ArgumentException.ThrowIfNullOrWhiteSpace(authSecret, nameof(authSecret));
+        ArgumentException.ThrowIfNullOrWhiteSpace(encryptedAuthId, nameof(encryptedAuthId));
+        ArgumentException.ThrowIfNullOrWhiteSpace(encryptedAuthSecret, nameof(encryptedAuthSecret));
+        ArgumentException.ThrowIfNullOrWhiteSpace(iv, nameof(iv));
 
-        var normalSecret = Encoding.UTF8.GetString(Convert.FromBase64String(authSecret));
-        var encryptedSecret = encryptionService.Encrypt(normalSecret, null, out var iv);
-
-        AuthSecret = encryptedSecret;
+        AuthId = encryptedAuthId;
+        AuthSecret = encryptedAuthSecret;
         Iv = iv;
+        UpdatedAt = DateTime.UtcNow;
     }
 
-    public void UpdateScopes(List<ApplicationScopeEntity> scopes)
+    public void UpdateScopes(IReadOnlyList<ApplicationScopeEntity> scopes)
     {
-        Scopes.Clear();
-        Scopes.AddRange(scopes);
+        _scopes.Clear();
+        foreach (var scope in scopes)
+        {
+            _scopes.Add(scope);
+        }
+
+        UpdatedAt = DateTime.UtcNow;
     }
 
-    public bool VerifySecret(string authSecret, IEncryptionService encryptionService)
+    public void Activate()
     {
-        var normalSecret = Encoding.UTF8.GetString(Convert.FromBase64String(authSecret));
-        var encryptedSecret = encryptionService.Encrypt(normalSecret, Iv, out _);
+        _stateMachine.Fire(ApplicationStateTrigger.Activate);
+        UpdatedAt = DateTime.UtcNow;
+    }
 
-        return string.Equals(AuthSecret, encryptedSecret, StringComparison.InvariantCultureIgnoreCase);
+    public void Deactivate()
+    {
+        _stateMachine.Fire(ApplicationStateTrigger.Deactivate);
+        UpdatedAt = DateTime.UtcNow;
     }
 
     #endregion Entity
-
-    private ApplicationEntity(string key, string name, ApplicationSource source, string authId, string authSecret, string iv)
-    {
-        Key = key;
-        Name = name;
-        Source = source;
-        AuthId = authId;
-        AuthSecret = authSecret;
-        Iv = iv;
-    }
-
-    public string Key { get; }
-    public string Name { get; private set; }
-    public ApplicationSource Source { get; }
-
-    internal string AuthId { get; private set; }
-    internal string AuthSecret { get; private set; }
-
-    internal string Iv { get; private set; }
-
-    public List<ApplicationScopeEntity> Scopes { get; } = [];
-
-    private static ApplicationEntity Create(string key, string name, ApplicationSource source, string authId, string authSecret, List<ApplicationScopeEntity> scopes, IEncryptionService encryptionService)
-    {
-        ArgumentException.ThrowIfNullOrWhiteSpace(key, nameof(key));
-        ArgumentException.ThrowIfNullOrWhiteSpace(name, nameof(name));
-        ArgumentException.ThrowIfNullOrWhiteSpace(authId, nameof(authId));
-        ArgumentException.ThrowIfNullOrWhiteSpace(authSecret, nameof(authSecret));
-
-        var normalSecret = Encoding.UTF8.GetString(Convert.FromBase64String(authSecret));
-        var encryptedSecret = encryptionService.Encrypt(normalSecret, null, out var iv);
-
-        var entity = new ApplicationEntity(key, name, source, authId, encryptedSecret, iv);
-        entity.UpdateScopes(scopes);
-
-        return entity;
-    }
-
-    public static ApplicationEntity CreateFromConfiguration(string key, string name, string authId, string authSecret, List<ApplicationScopeEntity> scopes, IEncryptionService encryptionService)
-    {
-        return Create(key, name, ApplicationSource.Configuration, authId, authSecret, scopes, encryptionService);
-    }
-
-    public static ApplicationEntity CreateFromApi(string key, string name, string authId, string authSecret, List<ApplicationScopeEntity> scopes, IEncryptionService encryptionService)
-    {
-        return Create(key, name, ApplicationSource.Api, authId, authSecret, scopes, encryptionService);
-    }
 }

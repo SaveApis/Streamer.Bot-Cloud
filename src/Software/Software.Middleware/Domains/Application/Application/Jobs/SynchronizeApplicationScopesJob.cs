@@ -1,8 +1,9 @@
 using Hangfire.Throttling;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Software.Middleware.Domains.Application.Application.Events;
-using Software.Middleware.Domains.Application.Domain.Models.Entities;
+using Software.Middleware.Domains.Application.Application.Services.ApplicationScope;
+using Software.Middleware.Domains.Application.Domain.Models.Dto.ApplicationScope;
+using Software.Middleware.Domains.Application.Domain.VO;
 using Software.Middleware.Domains.Application.Infrastructure.Scopes;
 using Software.Middleware.Domains.Common.Persistence.Sql.Context;
 using Utils.EntityFrameworkCore.Application.Events;
@@ -14,12 +15,8 @@ using ILogger = Serilog.ILogger;
 namespace Software.Middleware.Domains.Application.Application.Jobs;
 
 [HangfireQueue(HangfireQueue.System)]
-[Mutex("core:applications:scopes:synchronize")]
-public class SynchronizeApplicationScopesJob(
-    ILogger logger,
-    IDbContextFactory<CoreWriteDbContext> factory,
-    IMediator mediator,
-    IEnumerable<IApplicationScope> scopes) : BaseHangfireJob<MigrationCompletedEvent>(logger)
+[Mutex("application:scopes:synchronize")]
+public class SynchronizeApplicationScopesJob(ILogger logger, IApplicationScopeQueryService queryService, IApplicationScopeMutationService mutationService, IMediator mediator, IEnumerable<IApplicationScope> applicationScopes) : BaseHangfireJob<MigrationCompletedEvent>(logger)
 {
     protected override bool CheckSupport(MigrationCompletedEvent @event)
     {
@@ -29,91 +26,62 @@ public class SynchronizeApplicationScopesJob(
     [HangfireJobName("Synchronize application scopes")]
     public override async Task RunAsync(MigrationCompletedEvent @event, CancellationToken cancellationToken = default)
     {
-        var codeScopes = scopes.ToList();
-        if (codeScopes.Count > 0)
-        {
-            await SynchronizeAsync(codeScopes, cancellationToken).ConfigureAwait(false);
-        }
+        var codeApplicationScopes = applicationScopes.ToList();
+        var dbApplicationScopes = await queryService.GetAllAsync(cancellationToken);
+
+        var codeKeys = codeApplicationScopes.Select(x => x.Key).ToHashSet();
+        var dbKeys = dbApplicationScopes.Select(x => x.Key).ToHashSet();
+
+        var toAdd = codeKeys.Except(dbKeys).ToList();
+        var toRemove = dbKeys.Except(codeKeys).ToList();
+        var toUpdate = codeKeys.Intersect(dbKeys).ToList();
+        Logger.Debug("Found {ToAdd} application scopes to add, {ToRemove} to remove and {ToUpdate} to update", toAdd.Count, toRemove.Count, toUpdate.Count);
+
+        var addTask = AddTask(toAdd, codeApplicationScopes, cancellationToken);
+        var removeTask = RemoveTask(toRemove, cancellationToken);
+        var updateTask = UpdateTask(toUpdate, codeApplicationScopes, cancellationToken);
+
+        await Task.WhenAll(addTask, removeTask, updateTask);
+        Logger.Information("Synchronized application scopes");
 
         await mediator.Publish(new ApplicationScopesSynchronizedEvent(), cancellationToken).ConfigureAwait(false);
     }
 
-    private async Task SynchronizeAsync(List<IApplicationScope> codeScopes, CancellationToken cancellationToken)
+    private async Task AddTask(List<string> toAdd, List<IApplicationScope> codeApplicationScopes, CancellationToken cancellationToken = default)
     {
-        await using var context = await factory.CreateDbContextAsync(cancellationToken).ConfigureAwait(false);
-        var dbScopes = await context.ApplicationScopes
-            .AsNoTracking()
-            .ToListAsync(cancellationToken)
-            .ConfigureAwait(false);
-
-        var codeScopeKeys = codeScopes.Select(s => s.Key).ToHashSet(StringComparer.InvariantCultureIgnoreCase);
-        var dbScopeKeys = dbScopes.Select(s => s.Key).ToHashSet(StringComparer.InvariantCultureIgnoreCase);
-
-        var keysToAdd = codeScopeKeys.Except(dbScopeKeys).ToList();
-        var keysToRemove = dbScopeKeys.Except(codeScopeKeys).ToList();
-        var keysToUpdate = codeScopeKeys.Intersect(dbScopeKeys).ToList();
-        Logger.Information("Found {AddCount} scopes to add, {RemoveCount} scopes to remove and {UpdateCount} scopes to update", keysToAdd.Count, keysToRemove.Count, keysToUpdate.Count);
-
-        var addTask = AddAsync(context, keysToAdd, codeScopes);
-        var removeTask = RemoveAsync(context, keysToRemove);
-        var updateTask = UpdateAsync(context, keysToUpdate, codeScopes);
-        await Task.WhenAll(addTask, removeTask, updateTask).ConfigureAwait(false);
-
-        var count = await context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
-        Logger.Information("Synchronized total of {Count} application scopes", count);
-    }
-
-    private static async Task AddAsync(CoreWriteDbContext context, List<string> keysToAdd, List<IApplicationScope> codeScopes)
-    {
-        if (keysToAdd.Count == 0)
-        {
-            return;
-        }
-
-        var scopesToAdd = codeScopes
-            .Where(s => keysToAdd.Contains(s.Key, StringComparer.InvariantCultureIgnoreCase))
-            .Select(s => ApplicationScopeEntity.Create(s.Key, s.Name));
-
-        await context.ApplicationScopes.AddRangeAsync(scopesToAdd).ConfigureAwait(false);
-    }
-
-    private static async Task RemoveAsync(CoreWriteDbContext context, List<string> keysToRemove)
-    {
-        if (keysToRemove.Count == 0)
-        {
-            return;
-        }
-
-        var scopesToRemove = await context.ApplicationScopes
-            .Where(s => keysToRemove.Any(x => x.Equals(s.Key, StringComparison.InvariantCultureIgnoreCase)))
-            .ToListAsync()
-            .ConfigureAwait(false);
-
-        context.ApplicationScopes.RemoveRange(scopesToRemove);
-    }
-
-    private static async Task UpdateAsync(CoreWriteDbContext context, List<string> keysToUpdate, List<IApplicationScope> codeScopes)
-    {
-        if (keysToUpdate.Count == 0)
-        {
-            return;
-        }
-
-        var scopesToUpdate = await context.ApplicationScopes
-            .Where(s => keysToUpdate.Any(x => x.Equals(s.Key, StringComparison.InvariantCultureIgnoreCase)))
-            .ToListAsync()
-            .ConfigureAwait(false);
-
-        foreach (var dbScope in scopesToUpdate)
-        {
-            var codeScope = codeScopes.First(s => s.Key.Equals(dbScope.Key, StringComparison.InvariantCultureIgnoreCase));
-            if (!dbScope.HasChanges(codeScope.Name))
+        var createDtoEnumerable = codeApplicationScopes
+            .Where(x => toAdd.Contains(x.Key))
+            .Select(x => new ApplicationScopeCreateDto
             {
-                continue;
-            }
+                Key = x.Key,
+                Name = x.Name,
+                Description = x.Description,
+            });
+        var createTaskEnumerable = createDtoEnumerable.Select(dto => mutationService.CreateAsync(dto, cancellationToken));
+        await Task.WhenAll(createTaskEnumerable).ConfigureAwait(false);
+    }
 
-            dbScope.UpdateName(codeScope.Name);
-            context.ApplicationScopes.Update(dbScope);
-        }
+    private async Task RemoveTask(List<string> toRemove, CancellationToken cancellationToken = default)
+    {
+        var deleteTaskEnumerable = toRemove.Select(key => mutationService.DeleteAsync(ApplicationScopeKey.From(key), cancellationToken));
+
+        await Task.WhenAll(deleteTaskEnumerable).ConfigureAwait(false);
+    }
+
+    private async Task UpdateTask(List<string> toUpdate, List<IApplicationScope> codeApplicationScopes, CancellationToken cancellationToken = default)
+    {
+        var updateDtoEnumerable = codeApplicationScopes
+            .Where(x => toUpdate.Contains(x.Key))
+            .Select(x => new
+            {
+                x.Key,
+                Dto = new ApplicationScopeUpdateDto
+                {
+                    Name = x.Name,
+                    Description = x.Description,
+                }
+            });
+        var updateTaskEnumerable = updateDtoEnumerable.Select(x => mutationService.UpdateAsync(ApplicationScopeKey.From(x.Key), x.Dto, cancellationToken));
+        await Task.WhenAll(updateTaskEnumerable).ConfigureAwait(false);
     }
 }

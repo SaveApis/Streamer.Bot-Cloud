@@ -1,0 +1,2 @@
+PATCH {{baseUrl}}/applications/deactivate?key=test
+Authorization: ApplicationBasic {{frontendBasicAuth}}

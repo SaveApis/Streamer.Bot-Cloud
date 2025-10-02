@@ -2,6 +2,7 @@ namespace Software.Middleware.Domains.Application.Infrastructure.Scopes;
 
 public interface IApplicationScope
 {
-    string Key { get; }
-    string Name { get; }
+    public string Key { get; }
+    public string Name { get; }
+    public string? Description { get; }
 }

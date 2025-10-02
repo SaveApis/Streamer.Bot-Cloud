@@ -9,21 +9,25 @@ public class ApplicationEntityTypeConfiguration : IEntityTypeConfiguration<Appli
     public void Configure(EntityTypeBuilder<ApplicationEntity> builder)
     {
         builder.ToTable("Applications");
-        builder.HasKey(x => x.Key);
+        builder.HasKey(e => e.Key);
 
-        builder.Property(x => x.Key).HasMaxLength(100).IsRequired().ValueGeneratedNever();
-        builder.Property(x => x.Name).HasMaxLength(200).IsRequired();
-        builder.Property(x => x.Source).IsRequired().HasConversion<string>();
-        builder.Property(x => x.AuthId).HasMaxLength(200).IsRequired();
-        builder.Property(x => x.AuthSecret).HasMaxLength(200).IsRequired();
-        builder.Property(x => x.Iv).HasMaxLength(100).IsRequired();
+        builder.Property(e => e.Key).IsRequired().HasMaxLength(50);
+        builder.Property(e => e.CreatedAt).IsRequired();
+        builder.Property(e => e.UpdatedAt).IsRequired(false);
+        builder.Property(e => e.State).IsRequired().HasConversion<string>();
+        builder.Property(e => e.Name).IsRequired().HasMaxLength(100);
+        builder.Property(e => e.Description).IsRequired(false).HasMaxLength(500);
+        builder.Property(e => e.AuthId).IsRequired().HasMaxLength(100);
+        builder.Property(e => e.AuthSecret).IsRequired().HasMaxLength(100);
+        builder.Property(e => e.Iv).IsRequired().HasMaxLength(100);
 
-        builder.HasIndex(x => x.Key).IsUnique();
-        builder.HasIndex(x => x.Source);
-        builder.HasIndex(x => x.AuthId).IsUnique();
-        builder.HasIndex(x => x.AuthSecret).IsUnique();
-        builder.HasIndex(x => x.Iv).IsUnique();
+        builder.HasIndex(e => e.State);
+        builder.HasIndex(e => e.AuthId).IsUnique();
+        builder.HasIndex(e => e.AuthSecret).IsUnique();
+        builder.HasIndex(e => e.Iv).IsUnique();
 
-        builder.HasMany(x => x.Scopes).WithMany();
+        builder.HasMany(e => e.Scopes)
+            .WithMany()
+            .UsingEntity(typeBuilder => typeBuilder.ToTable("ApplicationApplicationScopes"));
     }
 }

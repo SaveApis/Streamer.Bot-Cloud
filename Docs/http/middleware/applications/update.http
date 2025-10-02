@@ -1,0 +1,10 @@
+PUT {{baseUrl}}/applications/update?key=test
+Authorization: ApplicationBasic {{frontendBasicAuth}}
+Content-Type: application/json
+
+{
+  "name": "Test Application Updated",
+  "description": "This is an updated test application",
+  "authId": "updated_test_auth_id",
+  "authSecret": "MTIzMTIzMTIzMTIzMTIzMTIzMTIzMTIzMTIzMTIzMTI="
+}

@@ -1,7 +1,0 @@
-PATCH {{baseUrl}}/applications/update/name?key=test
-Authorization: ApplicationBasic {{frontendBasicAuth}}
-Content-Type: application/json
-
-{
-  "Name": "Updated Test Application"
-}

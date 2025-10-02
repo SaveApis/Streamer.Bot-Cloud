@@ -1,12 +1,36 @@
+using Software.Middleware.Domains.Application.Domain.VO;
+
 namespace Software.Middleware.Domains.Application.Domain.Models.Entities;
 
 public class ApplicationScopeEntity
 {
+    private ApplicationScopeEntity(string key, DateTime createdAt, DateTime? updatedAt, string name, string? description)
+    {
+        Key = key;
+        CreatedAt = createdAt;
+        UpdatedAt = updatedAt;
+        Name = name;
+        Description = description;
+    }
+
+    public string Key { get; }
+    public DateTime CreatedAt { get; }
+    public DateTime? UpdatedAt { get; private set; }
+
+    public string Name { get; private set; }
+    public string? Description { get; private set; }
+
     #region Entity
 
-    public bool HasChanges(string name)
+    public static ApplicationScopeEntity Create(ApplicationScopeKey key, string name, string? description = null)
     {
-        return !string.Equals(Name, name, StringComparison.InvariantCultureIgnoreCase);
+        return new ApplicationScopeEntity(key.Value, DateTime.UtcNow, null, name, description);
+    }
+
+    public bool HasChanges(string name, string? description)
+    {
+        return !Name.Equals(name)
+               || !string.Equals(Description, description);
     }
 
     public void UpdateName(string name)
@@ -14,24 +38,14 @@ public class ApplicationScopeEntity
         ArgumentException.ThrowIfNullOrWhiteSpace(name, nameof(name));
 
         Name = name;
+        UpdatedAt = DateTime.UtcNow;
+    }
+
+    public void UpdateDescription(string? description)
+    {
+        Description = description;
+        UpdatedAt = DateTime.UtcNow;
     }
 
     #endregion Entity
-
-    private ApplicationScopeEntity(string key, string name)
-    {
-        Key = key;
-        Name = name;
-    }
-
-    public string Key { get; }
-    public string Name { get; private set; }
-
-    public static ApplicationScopeEntity Create(string key, string name)
-    {
-        ArgumentException.ThrowIfNullOrWhiteSpace(key, nameof(key));
-        ArgumentException.ThrowIfNullOrWhiteSpace(name, nameof(name));
-
-        return new ApplicationScopeEntity(key, name);
-    }
 }

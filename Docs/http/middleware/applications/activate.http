@@ -1,0 +1,2 @@
+PATCH {{baseUrl}}/applications/activate?key=test
+Authorization: ApplicationBasic {{frontendBasicAuth}}
