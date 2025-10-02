@@ -3,7 +3,9 @@ using Autofac;
 using Correlate.AspNetCore;
 using Software.Core.Infrastructure.Extensions;
 using Software.Middleware.Domains.Application;
-using Software.Middleware.Domains.Application.Application.Backend.Authorization;
+using Software.Middleware.Domains.Application.Application.Backend.Rest.Authentication.Handlers;
+using Software.Middleware.Domains.Application.Application.Backend.Rest.Authentication.Options;
+using Software.Middleware.Domains.Common.Application.Constants;
 using Software.Middleware.Domains.Common.Persistence.Sql.Context;
 using Utils.EntityFrameworkCore.Infrastructure.Extensions;
 using Utils.Hangfire.Infrastructure.Extensions;
@@ -12,7 +14,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddAuthorization();
 builder.Services.AddAuthentication()
-    .AddScheme<ApplicationBasicAuthHandlerOption, ApplicationBasicAuthHandler>(ApplicationBasicAuthHandler.SchemeName, null);
+    .AddScheme<ApplicationBasicAuthOption, ApplicationBasicAuthHandler>(AuthenticationSchemes.ApplicationBasic, "Application Basic Auth", null);
 
 builder.ConfigureSaveApis(Assembly.GetExecutingAssembly(), (context, containerBuilder, assemblyHelper) => containerBuilder.RegisterModule(new ApplicationModule(context.Configuration)));
 builder.Services.RegisterEntityFrameworkCore<CoreReadDbContext, CoreWriteDbContext>();

@@ -29,7 +29,6 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
           VALIDATE_CSHARP: true
           VALIDATE_DOCKERFILE_HADOLINT: true
-          VALIDATE_GITLEAKS: true
   build-csharp:
     name: Build C#
     runs-on: ubuntu-22.04

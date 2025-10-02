@@ -126,6 +126,8 @@ spec:
               value: "application:update"
             - name: Applications__0__Scopes__3
               value: "application:delete"
+            - name: Applications__0__Scopes__4
+              value: "application:scope:read"
             - name: Applications__1__Key
               value: "middleware"
             - name: Applications__1__Name

@@ -1,2 +1,2 @@
-GET {{baseUrl}}/applications?key=middleware
+GET {{baseUrl}}/applications?key=test
 Authorization: ApplicationBasic {{frontendBasicAuth}}

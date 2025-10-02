@@ -1,7 +1,6 @@
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Software.Middleware.Domains.Application.Domain.Options;
-using Module = Autofac.Module;
 
 namespace Software.Middleware.Domains.Application;
 

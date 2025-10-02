@@ -3,11 +3,9 @@ Authorization: ApplicationBasic {{frontendBasicAuth}}
 Content-Type: application/json
 
 {
-  "Key": "test",
-  "Name": "Test Application",
-  "AuthId": "test",
-  "AuthSecret": "dGVzdA==",
-  "Scopes": [
-    "application:read"
-  ]
+  "key": "test",
+  "name": "Test Application",
+  "description": "This is a test application",
+  "authId": "test_auth_id",
+  "authSecret": "dGVzdF9hdXRoX3NlY3JldA=="
 }
