@@ -2,6 +2,32 @@
 
 All notable changes to this project will be documented in this file. See [versionize](https://github.com/versionize/versionize) for commit guidelines.
 
+<a name="2.0.0"></a>
+## [2.0.0](https://www.github.com/SaveApis/Streamer.Bot-Cloud/releases/tag/v2.0.0) (2025-10-02)
+
+### ✨ Features
+
+* Application rework ([#41](https://www.github.com/SaveApis/Streamer.Bot-Cloud/issues/41)) ([51b4daf](https://www.github.com/SaveApis/Streamer.Bot-Cloud/commit/51b4daf8dd2df91b791015edd1cdb331d7c0f543))
+* Enrich logging with ApplicationName ([#39](https://www.github.com/SaveApis/Streamer.Bot-Cloud/issues/39)) ([08b792f](https://www.github.com/SaveApis/Streamer.Bot-Cloud/commit/08b792fdceeee6196340e0dcfe5b09c1d0f5ffc4))
+* Implement Serilog + BetterStack ([#38](https://www.github.com/SaveApis/Streamer.Bot-Cloud/issues/38)) ([eb3b473](https://www.github.com/SaveApis/Streamer.Bot-Cloud/commit/eb3b4735f121ccb90af61e459e843b78de1d8e19))
+* Jwt Module ([#30](https://www.github.com/SaveApis/Streamer.Bot-Cloud/issues/30)) ([4a3698d](https://www.github.com/SaveApis/Streamer.Bot-Cloud/commit/4a3698d95dd3b8b9fdb957315f6d6313fcac037b))
+* Mapper Module ([#33](https://www.github.com/SaveApis/Streamer.Bot-Cloud/issues/33)) ([1eb0a67](https://www.github.com/SaveApis/Streamer.Bot-Cloud/commit/1eb0a6704fbd84367a9de0afa76ea8f08056fbec))
+
+### ♻️ Code Refactoring
+
+* Auto register dependencies by interface ([#34](https://www.github.com/SaveApis/Streamer.Bot-Cloud/issues/34)) ([651c181](https://www.github.com/SaveApis/Streamer.Bot-Cloud/commit/651c1812e7adab6dbd3930f72b2685ea91d93113))
+* Refactor development signing key ([#31](https://www.github.com/SaveApis/Streamer.Bot-Cloud/issues/31)) ([a1f44f7](https://www.github.com/SaveApis/Streamer.Bot-Cloud/commit/a1f44f766961075a1371a3e921ded4cab12531f2))
+* Remove unnecessary docker build steps ([#35](https://www.github.com/SaveApis/Streamer.Bot-Cloud/issues/35)) ([7bb21dc](https://www.github.com/SaveApis/Streamer.Bot-Cloud/commit/7bb21dc5458b648c6b0d3871f8c11ab16a274601))
+* Remove unused mapper library ([#40](https://www.github.com/SaveApis/Streamer.Bot-Cloud/issues/40)) ([65756c9](https://www.github.com/SaveApis/Streamer.Bot-Cloud/commit/65756c97ba4279bd262d0367670af1bfefbea327))
+
+### 🐛 Bug Fixes
+
+* Fix application sync if no application scope is available ([#32](https://www.github.com/SaveApis/Streamer.Bot-Cloud/issues/32)) ([3b8a473](https://www.github.com/SaveApis/Streamer.Bot-Cloud/commit/3b8a473e8a3b50b7d6cdbed8159a345a3a841e4f))
+
+### Breaking Changes
+
+* Application rework ([#41](https://www.github.com/SaveApis/Streamer.Bot-Cloud/issues/41)) ([51b4daf](https://www.github.com/SaveApis/Streamer.Bot-Cloud/commit/51b4daf8dd2df91b791015edd1cdb331d7c0f543))
+
 <a name="1.5.1"></a>
 ## [1.5.1](https://www.github.com/SaveApis/Streamer.Bot-Cloud/releases/tag/v1.5.1) (2025-09-23)
 
