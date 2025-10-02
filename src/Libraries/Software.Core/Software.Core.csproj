@@ -18,12 +18,16 @@
     <ProjectReference Include="..\Utils\Utils.EntityFrameworkCore\Utils.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\Utils\Utils.Hangfire\Utils.Hangfire.csproj" />
     <ProjectReference Include="..\Utils\Utils.Jwt\Utils.Jwt.csproj" />
-    <ProjectReference Include="..\Utils\Utils.Mapper\Utils.Mapper.csproj" />
     <ProjectReference Include="..\Utils\Utils.Mediator\Utils.Mediator.csproj" />
     <ProjectReference Include="..\Utils\Utils.Rest\Utils.Rest.csproj" />
     <ProjectReference Include="..\Utils\Utils.Serilog\Utils.Serilog.csproj" />
     <ProjectReference Include="..\Utils\Utils.Swagger\Utils.Swagger.csproj" />
     <ProjectReference Include="..\Utils\Utils.Validation\Utils.Validation.csproj" />
   </ItemGroup>
+    
+    <ItemGroup>
+        <PackageReference Include="Riok.Mapperly" Version="4.2.1" />
+        <PackageReference Include="Vogen" Version="8.0.2" />
+    </ItemGroup>
 
 </Project>
