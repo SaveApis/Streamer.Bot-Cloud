@@ -1,0 +1,65 @@
+{
+    "name": "Streamer.Bot-Cloud",
+    "forwardPorts": [
+        "5000:5000", // Middleware
+        "6000:6000", // Event (Twitch)
+        "6001:6001", // Event (Discord)
+        "6002:6002", // Event (YouTube)
+        "7000:7000", // Bot (Twitch)
+        "7001:7001", // Bot (Discord)
+        "7002:7002", // Bot (YouTube)
+    ],
+    "portsAttributes": {
+        "5000": {
+            "label": "Middleware HTTP Port",
+            "protocol": "http"
+        },
+        "6000": {
+            "label": "Event Twitch HTTP Port",
+            "protocol": "http"
+        },
+        "6001": {
+            "label": "Event Discord HTTP Port",
+            "protocol": "http"
+        },
+        "6002": {
+            "label": "Event YouTube HTTP Port",
+            "protocol": "http"
+        },
+        "7000": {
+            "label": "Bot Twitch HTTP Port",
+            "protocol": "http"
+        },
+        "7001": {
+            "label": "Bot Discord HTTP Port",
+            "protocol": "http"
+        },
+        "7002": {
+            "label": "Bot YouTube HTTP Port",
+            "protocol": "http"
+        }
+    },
+    "dockerComposeFile": "docker-compose.yml",
+    "service": "devcontainer",
+    "workspaceFolder": "/Workspace",
+    "features": {
+        "ghcr.io/devcontainers/features/docker-in-docker:2": {},
+        "ghcr.io/devcontainers/features/dotnet:2": {},
+        "ghcr.io/devcontainers/features/git:1": {},
+        "ghcr.io/devcontainers/features/kubectl-helm-minikube:1": {},
+        "ghcr.io/devcontainers/features/node:1": {}
+    },
+    "customizations": {
+        "jetbrains": {
+            "backend": "Rider"
+        }
+    },
+    "onCreateCommand": {
+        "restore": ["dotnet", "restore"],
+        "installTemplates": "dotnet new install HotChocolate.Templates",
+        "addGitSafeDirectory": "git config --global --add safe.directory /Workspace"
+    },
+    "postStartCommand": {
+        "updateTemplates": "dotnet new update"
+    }
+}
