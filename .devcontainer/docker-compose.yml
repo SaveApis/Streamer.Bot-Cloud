@@ -1,3 +1,4 @@
+name: streamer-bot-cloud
 services:
     devcontainer:
         build:
