@@ -23,6 +23,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Utils", "Utils", "{2E41761B
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utils.Core", "src\Libraries\Utils\Utils.Core\Utils.Core.csproj", "{F986FE57-B42E-4F89-A568-26C02076813E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utils.Rest", "src\Libraries\Utils\Utils.Rest\Utils.Rest.csproj", "{AD70600C-58A0-455C-9A46-A6A0FAEA3004}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -40,6 +42,7 @@ Global
 		{ED04D4F9-4013-43D5-B1DB-31FCB9BCF186} = {D6EEF9DA-F842-44FB-9635-A560463B697E}
 		{2E41761B-17D1-4137-BDB9-6C4F6EE687F1} = {D6EEF9DA-F842-44FB-9635-A560463B697E}
 		{F986FE57-B42E-4F89-A568-26C02076813E} = {2E41761B-17D1-4137-BDB9-6C4F6EE687F1}
+		{AD70600C-58A0-455C-9A46-A6A0FAEA3004} = {2E41761B-17D1-4137-BDB9-6C4F6EE687F1}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{6B0E11A0-E45E-40B9-A3EC-F0688CF8977D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -62,5 +65,9 @@ Global
 		{F986FE57-B42E-4F89-A568-26C02076813E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F986FE57-B42E-4F89-A568-26C02076813E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F986FE57-B42E-4F89-A568-26C02076813E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AD70600C-58A0-455C-9A46-A6A0FAEA3004}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD70600C-58A0-455C-9A46-A6A0FAEA3004}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD70600C-58A0-455C-9A46-A6A0FAEA3004}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD70600C-58A0-455C-9A46-A6A0FAEA3004}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
