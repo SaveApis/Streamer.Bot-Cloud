@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Hosting;
 using Utils.Core;
 using Utils.Core.Application.Helpers;
+using Utils.Rest;
 
 namespace Software.Core.Application.Extensions;
 
@@ -19,6 +20,7 @@ public static class WebApplicationBuilderExtensions
                 {
                     // Utils
                     containerBuilder.RegisterModule(new CoreModule(assemblyHelper));
+                    containerBuilder.RegisterModule(new RestModule(assemblyHelper));
 
                     // Software
                     registerSoftwareModules?.Invoke(assemblyHelper, context, containerBuilder);

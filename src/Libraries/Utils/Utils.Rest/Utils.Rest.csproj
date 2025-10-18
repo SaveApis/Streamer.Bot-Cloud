@@ -8,8 +8,15 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="../Utils/Utils.Core/Utils.Core.csproj" />
-        <ProjectReference Include="..\Utils\Utils.Rest\Utils.Rest.csproj" />
+      <ProjectReference Include="..\Utils.Core\Utils.Core.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="9.0.10" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Application\" />
     </ItemGroup>
 
 </Project>
