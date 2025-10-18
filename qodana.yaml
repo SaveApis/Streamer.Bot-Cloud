@@ -1,0 +1,72 @@
+#-------------------------------------------------------------------------------#
+#               Qodana analysis is configured by qodana.yaml file               #
+#             https://www.jetbrains.com/help/qodana/qodana-yaml.html            #
+#-------------------------------------------------------------------------------#
+#################################################################################
+#              WARNING: Do not store sensitive information in this file,        #
+#               as its contents will be included in the Qodana report.          #
+#################################################################################
+version: "1.0"
+#Specify inspection profile for code analysis
+linter: qodana-cdnet
+profile:
+  name: qodana.starter
+dotnet:
+  solution: Streamer.Bot-Cloud.sln
+include:
+  - name: RouteTemplates.ActionRoutePrefixCanBeExtractedToControllerRoute
+  - name: RouteTemplates.ControllerRouteParameterIsNotPassedToMethods
+  - name: RouteTemplates.MethodMissingRouteParameters
+  - name: RouteTemplates.RouteParameterIsNotPassedToMethod
+  - name: RouteTemplates.ParameterConstraintCanBeSpecified
+  - name: RouteTemplates.ParameterTypeCanBeMadeStricter
+  - name: SeparateLocalFunctionsWithJumpStatement
+  - name: CanSimplifySetAddingWithSingleCall
+  - name: ShellCheck
+  - name: RiderSolutionErrorsInspection
+  - name: CyclomaticComplexityInspection
+  - name: KubernetesDeprecatedKeys
+  - name: KubernetesDeprecatedValues
+  - name: KubernetesDeprecatedResources
+  - name: HelmChartUnknownValues
+  - name: HelmChartMissingKeys
+  - name: KubernetesMissingKeys
+  - name: KubernetesUnknownValues
+  - name: KubernetesUnknownKeys
+  - name: KubernetesUnknownResourcesInspection
+  - name: CyclicJobDependency
+  - name: MandatoryParamsAbsent
+  - name: IllegalJobDependency
+  - name: UndefinedAction
+  - name: GithubFunctionSignatureValidation
+  - name: UndefinedParamsPresent
+  - name: HeapView.ClosureAllocation
+  - name: HeapView.DelegateAllocation
+  - name: UnusedMethodReturnValue.Global
+  - name: HeapView.ObjectAllocation
+  - name: HeapView.ObjectAllocation.Evident
+
+#Enable inspections
+#include:
+#  - name: <SomeEnabledInspectionId>
+#Disable inspections
+#exclude:
+#  - name: <SomeDisabledInspectionId>
+#    paths:
+#      - <path/where/not/run/inspection>
+#Execute shell command before Qodana execution (Applied in CI/CD pipeline)
+#bootstrap: sh ./prepare-qodana.sh
+#Install IDE plugins before Qodana execution (Applied in CI/CD pipeline)
+#plugins:
+#  - id: <plugin.id> #(plugin id can be found at https://plugins.jetbrains.com)
+# Quality gate. Will fail the CI/CD pipeline if any condition is not met
+# severityThresholds - configures maximum thresholds for different problem severities
+# testCoverageThresholds - configures minimum code coverage on a whole project and newly added code
+# Code Coverage is available in Ultimate and Ultimate Plus plans
+#failureConditions:
+#  severityThresholds:
+#    any: 15
+#    critical: 5
+#  testCoverageThresholds:
+#    fresh: 70
+#    total: 50
