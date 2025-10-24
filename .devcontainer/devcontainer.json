@@ -27,7 +27,7 @@
                 "com.intellij.kubernetes",
                 "com.github.copilot",
                 "mobi.hsz.idea.gitignore",
-                "fr.socolin.application-insights-debug-log-viewer",
+                "fr.socolin.application-insights-debug-log-viewer"
             ]
         }
     },
