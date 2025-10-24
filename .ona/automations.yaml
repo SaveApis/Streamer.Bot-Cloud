@@ -1,0 +1,9 @@
+tasks:
+    taskReference:
+        name: Tools & Restore
+        description: Update .NET Tools & Restore dependencies
+        triggeredBy:
+            - postDevcontainerStart
+        command: |
+            dotnet new install HotChocolate.Templates
+            dotnet restore .
