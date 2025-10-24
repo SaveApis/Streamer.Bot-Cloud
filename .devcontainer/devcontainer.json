@@ -1,0 +1,39 @@
+{
+    // General
+    "name": "Template Backend",
+    "workspaceFolder": "/Workspace",
+
+    // Image/Compose
+    "dockerComposeFile": "docker-compose.yml",
+    "service": "devcontainer",
+
+    // Network settings
+    "forwardPorts": [], // Implement ports to forward
+    "portsAttributes": {}, // Add port attributes to ports defined in #forwardPorts
+
+    // Features & Customizations
+    "features": {
+        "ghcr.io/devcontainers/features/docker-in-docker:2": {},
+        "ghcr.io/devcontainers/features/dotnet:2": {
+            "version": "9.0"
+        },
+        "ghcr.io/devcontainers/features/git:1": {},
+        "ghcr.io/devcontainers/features/git-lfs:1": {},
+        "ghcr.io/devcontainers/features/github-cli:1": {},
+        "ghcr.io/devcontainers/features/kubectl-helm-minikube:1": {}
+    },
+    "customizations": {
+        "jetbrains": {
+            "backend": "Rider"
+        }
+    },
+
+    // Scripts
+    "onCreateCommand": {
+        "installTemplates": "dotnet new install HotChocolate.Templates"
+    },
+    "postStartCommand": {
+        "updateTemplates": "dotnet new update",
+        "restore": "dotnet restore ."
+    }
+}

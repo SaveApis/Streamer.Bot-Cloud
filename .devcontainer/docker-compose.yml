@@ -1,0 +1,6 @@
+name: template-backend
+services:
+    devcontainer:
+        build:
+            context: .
+            dockerfile: Dockerfile
