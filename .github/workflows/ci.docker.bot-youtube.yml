@@ -1,0 +1,37 @@
+name: CI Docker (Bot YouTube)
+on:
+  pull_request:
+    paths:
+      - src/Software/Bot/Bot.YouTube/**
+      - .github/workflows/ci.docker.bot-youtube.yml
+  push:
+    paths:
+      - src/Software/Bot/Bot.YouTube/**
+      - .github/workflows/ci.docker.bot-youtube.yml
+    branches:
+      - main
+
+concurrency:
+  cancel-in-progress: true
+  group: ci-docker-bot-youtube-${{ github.ref }}
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5.0.0
+      - name: Docker Setup QEMU
+        uses: docker/setup-qemu-action@v3.6.0
+      - name: Docker Setup Buildx
+        uses: docker/setup-buildx-action@v3.11.1
+      - name: Build and push Docker images
+        uses: docker/build-push-action@v6.18.0
+        with:
+          push: false
+          file: src/Software/Bot/Bot.YouTube/Dockerfile
+          context: .
+          tags: |
+            registry.digitalocean.com/saveapis/streamer-bot-cloud-bot-youtube:${{ github.sha }}
+            registry.digitalocean.com/saveapis/streamer-bot-cloud-bot-youtube:dev
