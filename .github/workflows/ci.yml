@@ -1,0 +1,83 @@
+name: CI
+
+on:
+  pull_request:
+    paths:
+      - 'src/**'
+      - 'test/**'
+      - '.github/workflows/ci.yml'
+  push:
+    paths:
+      - 'src/**'
+      - 'test/**'
+      - '.github/workflows/ci.yml'
+    branches:
+      - main
+
+concurrency:
+  cancel-in-progress: true
+  group: ci-${{ github.ref }}
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5.0.0
+      - name: Setup .NET Core SDK
+        uses: actions/setup-dotnet@v5.0.0
+        with:
+          dotnet-version: '9.0'
+      - name: Build
+        run: dotnet build --framework net9.0 --configuration Release --nologo
+  publish-middleware:
+    needs: build
+    name: Publish middleware
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5.0.0
+      - name: Setup .NET Core SDK
+        uses: actions/setup-dotnet@v5.0.0
+        with:
+          dotnet-version: '9.0'
+      - name: Publish
+        run: dotnet publish src/Software/Middleware/Middleware.csproj --framework net9.0 --configuration Release --nologo --output ./publish
+  publish-software:
+    needs: build
+    strategy:
+      matrix:
+        type: [ Bot, Event ]
+        platform: [ Twitch, Discord, YouTube, TikTok ]
+
+    name: Publish ${{ matrix.type }} (${{ matrix.platform }})
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5.0.0
+      - name: Setup .NET Core SDK
+        uses: actions/setup-dotnet@v5.0.0
+        with:
+          dotnet-version: '9.0'
+      - name: Publish
+        run: dotnet publish src/Software/${{ matrix.type }}/${{ matrix.type }}.${{ matrix.platform }}/${{ matrix.type }}.${{ matrix.platform }}.csproj --framework net9.0 --configuration Release --nologo --output ./publish
+  test:
+    needs: build
+    strategy:
+      matrix:
+        type: [ Unit, Integration, Architecture ]
+    name: Test (${{ matrix.type }})
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5.0.0
+      - name: Setup .NET Core SDK
+        uses: actions/setup-dotnet@v5.0.0
+        with:
+          dotnet-version: '9.0'
+      - name: Test
+        run: dotnet test test/Tests.${{ matrix.type }}/Tests.${{ matrix.type }}.csproj --nologo --configuration Release --framework net9.0
