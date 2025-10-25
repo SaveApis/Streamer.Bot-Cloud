@@ -6,7 +6,17 @@
     "remoteUser": "vscode",
 
     // Network settings
-    "forwardPorts": [5000, 6000, 6001, 6002, 7000, 7001, 7002],
+    "forwardPorts": [
+      5000,
+      6000,
+      6001,
+      6002,
+      6003,
+      7000,
+      7001,
+      7002,
+      7003
+    ],
 
     // Features & Customizations
     "features": {
