@@ -3,7 +3,7 @@
     "name": "Template Backend",
     "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
     "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
-    "remoteUser": "streamerbotcloud",
+    "remoteUser": "vscode",
 
     // Network settings
     "forwardPorts": [5000, 6000, 6001, 6002, 7000, 7001, 7002],
